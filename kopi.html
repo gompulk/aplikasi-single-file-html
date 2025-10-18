@@ -330,6 +330,161 @@
                     </div>
                     <div class="flex space-x-4">
                         <button type="button" onclick="closeCheckoutModal()" class="flex-1 bg-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-400 transition">
+        dden">
+                <div class="max-w-4xl mx-auto">
+                    <h2 class="text-3xl font-bold mb-8 text-center">Hubungi Kami</h2>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="bg-white p-6 rounded-xl shadow-lg">
+                            <h3 class="text-xl font-semibold mb-4">Informasi Kontak</h3>
+                            <div class="space-y-3">
+                                <div class="flex items-center">
+                                    <span data-icon="address" class="text-theme-primary w-6"></span>
+                                    <span id="contactAddress">Jl. Contoh No. 123, Jakarta</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span data-icon="contact" class="text-theme-primary w-6"></span>
+                                    <span id="contactPhone">+62 812-3456-7890</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span data-icon="email" class="text-theme-primary w-6"></span>
+                                    <span id="contactEmail">info@kopiku.com</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span data-icon="hours" class="text-theme-primary w-6"></span>
+                                    <span id="contactHours">Senin - Minggu: 08:00 - 22:00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-lg">
+                            <h3 class="text-xl font-semibold mb-4">Kirim Pesan</h3>
+                            <form onsubmit="sendContactMessage(event)" class="space-y-4">
+                                <input type="text" placeholder="Nama Anda" class="w-full p-3 border rounded-lg" required>
+                                <input type="email" placeholder="Email Anda" class="w-full p-3 border rounded-lg" required>
+                                <textarea placeholder="Pesan Anda" rows="4" class="w-full p-3 border rounded-lg" required></textarea>
+                                <button type="submit" class="w-full bg-theme-primary text-white py-3 rounded-lg hover:bg-theme-primary-hover transition">
+                                    <span data-icon="send" class="mr-2"></span>Kirim Pesan
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-lg z-40">
+                <nav class="flex justify-around py-2">
+                    <button onclick="showPage('home')" class="nav-btn flex flex-col items-center text-gray-600 hover:text-theme-primary transition">
+                        <span data-icon="home" class="text-xl"></span><span class="text-xs">Beranda</span>
+                    </button>
+                    <button onclick="showPage('menu')" class="nav-btn flex flex-col items-center text-gray-600 hover:text-theme-primary transition">
+                        <span data-icon="menu" class="text-xl"></span><span class="text-xs">Menu</span>
+                    </button>
+                    <button onclick="showPage('queue')" class="nav-btn flex flex-col items-center text-gray-600 hover:text-theme-primary transition">
+                        <span data-icon="queue" class="text-xl"></span><span class="text-xs">Antrian</span>
+                    </button>
+                    <button onclick="showPage('contact')" class="nav-btn flex flex-col items-center text-gray-600 hover:text-theme-primary transition">
+                        <span data-icon="contact" class="text-xl"></span><span class="text-xs">Kontak</span>
+                    </button>
+                </nav>
+            </div>
+        </main>
+
+        <button id="cartFab" onclick="showCartModal()" class="fixed bottom-20 md:bottom-8 right-8 bg-theme-primary text-white w-16 h-16 rounded-full shadow-lg flex items-center justify-center text-2xl hover:bg-theme-primary-hover transition z-30 hidden">
+            <span data-icon="cart"></span>
+            <span id="cartItemCountBadge" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center hidden">0</span>
+        </button>
+
+        <footer class="bg-gray-800 text-white py-8 mt-16 pb-20 md:pb-8">
+            <div class="container mx-auto px-4 text-center">
+                <p>&copy; 2025 <span id="footerMerchantName">KopiKu</span>. All rights reserved.</p>
+                <div class="mt-4 flex justify-center space-x-4">
+                    <a href="#" class="hover:text-theme-primary transition"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="hover:text-theme-primary transition"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="hover:text-theme-primary transition"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div id="cartModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl p-6 w-full max-w-sm slide-in">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold">Keranjang</h2>
+                <button onclick="closeCartModal()" class="text-2xl text-gray-500 hover:text-gray-800">&times;</button>
+            </div>
+            <div id="modalCartItems" class="mb-4 max-h-64 overflow-y-auto pr-2">
+                </div>
+            <div class="border-t pt-4">
+                <div class="flex justify-between font-bold text-lg mb-4">
+                    <span>Total</span>
+                    <span id="modalCartTotal">Rp 0</span>
+                </div>
+                <div class="flex space-x-4">
+                    <button onclick="closeCartModal()" class="flex-1 bg-gray-300 text-gray-800 py-3 rounded-lg hover:bg-gray-400 transition">
+                        Tutup
+                    </button>
+                    <button onclick="proceedToCheckout()" class="flex-1 bg-theme-primary text-white py-3 rounded-lg hover:bg-theme-primary-hover transition">
+                        Checkout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl p-8 w-full max-w-sm slide-in">
+            <h2 class="text-2xl font-bold mb-6 text-center">Login Admin</h2>
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Username</label>
+                    <input type="text" id="loginUsername" class="w-full p-3 border rounded-lg" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Password</label>
+                    <input type="password" id="loginPassword" class="w-full p-3 border rounded-lg" required>
+                </div>
+                <button type="submit" class="w-full bg-theme-primary text-white py-3 rounded-lg hover:bg-theme-primary-hover transition">
+                    <i class="fas fa-sign-in-alt mr-2"></i>Login
+                </button>
+            </form>
+            <button onclick="closeLoginModal()" class="w-full mt-4 text-gray-600 hover:text-gray-800 transition">
+                Batal
+            </button>
+        </div>
+    </div>
+
+    <div id="checkoutModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl p-6 md:p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto slide-in">
+            <h2 class="text-2xl font-bold mb-6">Checkout</h2>
+            <form onsubmit="processCheckout(event)" class="space-y-4">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Nama Lengkap</label>
+                        <input type="text" id="customerName" class="w-full p-3 border rounded-lg" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Nomor Telepon</label>
+                        <input type="tel" id="customerPhone" class="w-full p-3 border rounded-lg" required>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Email (Opsional)</label>
+                    <input type="email" id="customerEmail" class="w-full p-3 border rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Metode Pembayaran</label>
+                    <div id="paymentMethods" class="grid grid-cols-2 gap-4">
+                        </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Catatan (Opsional)</label>
+                    <textarea id="orderNotes" rows="3" class="w-full p-3 border rounded-lg"></textarea>
+                </div>
+                <div class="border-t pt-4">
+                    <div class="flex justify-between text-lg md:text-xl font-bold mb-4">
+                        <span>Total Pembayaran:</span>
+                        <span id="checkoutTotal">Rp 0</span>
+                    </div>
+                    <div class="flex space-x-4">
+                        <button type="button" onclick="closeCheckoutModal()" class="flex-1 bg-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-400 transition">
                 @keyframes slideIn { from { transform: translateY(-10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         .hover-scale { transition: transform 0.2s; }
         .hover-scale:hover { transform: scale(1.02); }
@@ -2597,4 +2752,5 @@
     </script>
 </body>
 </html>
+
 
