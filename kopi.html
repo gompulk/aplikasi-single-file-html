@@ -7,6 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
         /* Variabel Warna Global untuk Tema */
         :root {
             --theme-primary: #8B5CF6; /* ungu */
@@ -14,6 +16,11 @@
             --theme-text: #8B5CF6;
             --theme-gradient-from: #8B5CF6;
             --theme-gradient-to: #2563EB;
+        }
+
+        /* ### PERUBAHAN 2: Terapkan Font Poppins ke Body ### */
+        body {
+            font-family: 'Poppins', sans-serif;
         }
 
         /* Kelas utilitas baru untuk menggunakan variabel tema */
@@ -711,7 +718,6 @@
             const sidebar = document.getElementById('adminSidebar');
             const toggleButton = document.getElementById('sidebarToggle');
             
-            // ### PERUBAHAN ###: Logika sidebar toggle baru
             if (toggleButton) {
                 toggleButton.addEventListener('click', (event) => {
                     event.stopPropagation();
@@ -822,15 +828,14 @@
                 applyTheme(savedTheme);
             }
         }
-        // ... (Sisa kode dari file asli tetap sama)
-        // Salin dan tempel semua fungsi dari `showPage` hingga akhir di sini.
+        
         function showPage(pageId) {
             document.querySelectorAll('.page-content').forEach(page => {
                 page.classList.add('hidden');
             });
             document.getElementById(pageId + 'Page').classList.remove('hidden');
-            document.body.scrollTop = 0; // For Safari
-            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+            document.body.scrollTop = 0; 
+            document.documentElement.scrollTop = 0; 
             setActiveNav(pageId);
         }
 
@@ -839,7 +844,6 @@
                 btn.classList.remove('text-theme-primary');
                 btn.classList.add('text-gray-600');
 
-                // For Mobile Nav
                 if (btn.querySelector('span')) {
                     const mobilePageId = btn.querySelector('span').textContent.toLowerCase();
                      if(mobilePageId.includes(pageId) || (pageId === 'home' && mobilePageId.includes('beranda'))) {
@@ -847,7 +851,6 @@
                         btn.classList.add('text-theme-primary');
                      }
                 } 
-                // For Desktop Nav
                 else {
                     if (btn.textContent.toLowerCase().includes(pageId) || 
                         (pageId === 'home' && btn.textContent.includes('Beranda')) ||
@@ -881,14 +884,12 @@
             const data = db.getData();
             const products = data.products;
             
-            // Load featured products
             const featuredContainer = document.getElementById('featuredProducts');
             featuredContainer.innerHTML = '';
             products.slice(0, 4).forEach(product => {
                 featuredContainer.innerHTML += createProductCard(product);
             });
             
-            // Load all products
             const productsContainer = document.getElementById('productsGrid');
             productsContainer.innerHTML = '';
             products.forEach(product => {
@@ -1144,10 +1145,6 @@
             });
         }
         
-        // ... Sisa fungsi admin (handleLogin, showAdminPanel, dll) tetap sama, tidak perlu diubah.
-        // Cukup salin sisa kode dari file asli Anda ke sini.
-        // Pastikan Anda menyalin dari `function showLoginModal()` hingga akhir script.
-    
         function showLoginModal() {
             document.getElementById('loginModal').classList.remove('hidden');
         }
@@ -1239,8 +1236,6 @@
             }
         }
         
-        // ... (Fungsi-fungsi sisanya tidak perlu diubah, bisa disalin langsung)
-
 	function loadOrdersTable() {
             const data = db.getData();
             const ordersTable = document.getElementById('ordersTable');
@@ -1735,80 +1730,32 @@
         }
 
         function printReport() {
-            // *** BAGIAN YANG DIUBAH DIMULAI DI SINI ***
-
-            // 1. Ambil data terbaru dari database
             const data = db.getData();
             const merchantName = data.settings.merchantName;
-
-            // Create a new window for printing
             const printWindow = window.open('', '_blank');
-            
-            // Get the table container directly
             const tableContainer = document.getElementById('reportTableContainer');
-            
-            // Get date range for title
             const startDate = document.getElementById('reportStartDate').value;
             const endDate = document.getElementById('reportEndDate').value;
             
-            // Create print-friendly HTML
             const printHTML = `
                 <!DOCTYPE html>
                 <html>
                 <head>
                     <title>Laporan Transaksi ${merchantName}</title>
                     <style>
-                        body { 
-                            font-family: Arial, sans-serif; 
-                            margin: 20px; 
-                            color: #000;
-                            background: white;
-                        }
-                        h1 { 
-                            text-align: center; 
-                            margin-bottom: 10px;
-                            color: #000;
-                            font-size: 18px;
-                            font-weight: bold;
-                        }
-                        h2 { 
-                            text-align: center; 
-                            margin-bottom: 20px;
-                            color: #000;
-                            font-size: 14px;
-                        }
-                        h3 { 
-                            text-align: center; 
-                            margin-bottom: 15px;
-                            color: #000;
-                            font-size: 14px;
-                            font-weight: bold;
-                        }
-                        table { 
-                            width: 100%; 
-                            border-collapse: collapse; 
-                            margin-top: 10px;
-                        }
-                        th, td { 
-                            border: 1px solid #000; 
-                            padding: 6px; 
-                            text-align: left;
-                            font-size: 12px;
-                        }
-                        th { 
-                            background-color: #f5f5f5; 
-                            font-weight: bold;
-                        }
-                        .no-print { 
-                            display: none; 
-                        }
+                        body { font-family: 'Poppins', Arial, sans-serif; margin: 20px; color: #000; background: white; }
+                        h1 { text-align: center; margin-bottom: 10px; color: #000; font-size: 18px; font-weight: bold; }
+                        h2 { text-align: center; margin-bottom: 20px; color: #000; font-size: 14px; }
+                        h3 { text-align: center; margin-bottom: 15px; color: #000; font-size: 14px; font-weight: bold; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                        th, td { border: 1px solid #000; padding: 6px; text-align: left; font-size: 12px; }
+                        th { background-color: #f5f5f5; font-weight: bold; }
                         @media print {
                             body { margin: 10px; }
                             h1 { font-size: 16px; }
                             h2 { font-size: 12px; }
                             h3 { font-size: 12px; }
                             th, td { padding: 4px; font-size: 10px; }
-                            table { font-size: 10px; }
                         }
                     </style>
                 </head>
@@ -1821,18 +1768,14 @@
                 </html>
             `;
             
-            // Write content to print window
             printWindow.document.write(printHTML);
             printWindow.document.close();
             
-            // Wait for content to load, then print
             printWindow.onload = function() {
                 printWindow.focus();
                 printWindow.print();
                 printWindow.close();
             };
-
-            // *** BAGIAN YANG DIUBAH BERAKHIR DI SINI ***
         }
         
         function formatDate(dateString) {
@@ -1871,7 +1814,8 @@
         }
 
         function downloadDatabase() {
-            const notepadContent = db.exportToNotepad();
+            const data = db.getData();
+            const notepadContent = JSON.stringify(data, null, 2);
             const blob = new Blob([notepadContent], { type: 'text/plain;charset=utf-8;' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -1883,7 +1827,6 @@
             showToast('success', 'Berhasil', 'Database telah diunduh');
         }
 
-        // Contact Form
         function sendContactMessage(event) {
             event.preventDefault();
             
@@ -1903,7 +1846,6 @@
             showToast('success', 'Berhasil', 'Pesan Anda telah terkirim');
         }
 
-        // Toast Notification
         function showToast(type, title, message) {
             const toast = document.getElementById('toast');
             const toastIcon = document.getElementById('toastIcon');
@@ -1928,7 +1870,6 @@
             }, 3000);
         }
 
-        // Initialize category filter
         document.addEventListener('DOMContentLoaded', function() {
             filterProducts('all');
         });
