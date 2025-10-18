@@ -6,6 +6,7 @@
     <title>KopiKu - Coffee Shop Management System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
@@ -40,6 +41,24 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .print-only { display: none; }
         @media print { .print-only { display: block; } .no-print { display: none; } }
+
+        /* Styling tambahan untuk dropdown pratinjau */
+        .icon-select-wrapper {
+            position: relative;
+        }
+        .icon-select-wrapper select {
+            padding-left: 3rem; /* Memberi ruang untuk ikon pratinjau */
+        }
+        .icon-preview-box {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--theme-primary);
+            font-size: 1.25rem;
+            pointer-events: none; /* agar bisa klik selectnya */
+            z-index: 10;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -55,24 +74,24 @@
             <div class="container mx-auto px-4 py-4">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center space-x-3">
-                        <i class="fas fa-coffee text-theme-primary text-2xl"></i>
+                        <span data-icon="coffee-cup" class="text-theme-primary text-2xl"></span>
                         <h1 class="text-xl md:text-2xl font-bold text-gray-800" id="merchantName">KopiKu Coffee Shop</h1>
                     </div>
                     <nav class="hidden md:flex items-center space-x-4">
                         <button onclick="showPage('home')" class="nav-btn text-gray-600 hover:text-theme-primary transition">
-                            <i class="fas fa-home mr-2"></i>Beranda
+                            <span data-icon="home" class="mr-2"></span>Beranda
                         </button>
                         <button onclick="showPage('menu')" class="nav-btn text-gray-600 hover:text-theme-primary transition">
-                            <i class="fas fa-coffee mr-2"></i>Menu
+                            <span data-icon="menu" class="mr-2"></span>Menu
                         </button>
                         <button onclick="showPage('queue')" class="nav-btn text-gray-600 hover:text-theme-primary transition">
-                            <i class="fas fa-users mr-2"></i>Antrian
+                            <span data-icon="queue" class="mr-2"></span>Antrian
                         </button>
                         <button onclick="showPage('contact')" class="nav-btn text-gray-600 hover:text-theme-primary transition">
-                            <i class="fas fa-phone mr-2"></i>Kontak
+                            <span data-icon="contact" class="mr-2"></span>Kontak
                         </button>
                         <button onclick="showLoginModal()" class="bg-theme-primary text-white px-4 py-2 rounded-lg hover:bg-theme-primary-hover transition">
-                            <i class="fas fa-user-shield mr-2"></i>Admin
+                            <span data-icon="admin" class="mr-2"></span>Admin
                         </button>
                     </nav>
                     <div class="md:hidden">
@@ -90,10 +109,10 @@
                 <p class="text-lg md:text-xl mb-8" id="jumbotronSubtitle">Nikmati kopi terbaik dengan suasana yang nyaman</p>
                 <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
                     <button onclick="showPage('menu')" class="bg-white text-theme-primary px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition hover-scale">
-                        <i class="fas fa-shopping-cart mr-2"></i>Pesan Sekarang
+                        <span data-icon="cart" class="mr-2"></span>Pesan Sekarang
                     </button>
                     <button onclick="showPage('queue')" class="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-theme-primary transition hover-scale">
-                        <i class="fas fa-users mr-2"></i>Lihat Antrian
+                        <span data-icon="queue" class="mr-2"></span>Lihat Antrian
                     </button>
                 </div>
             </div>
@@ -104,21 +123,21 @@
                 <div class="grid md:grid-cols-3 gap-8 mb-12">
                     <div class="bg-white p-6 rounded-xl shadow-lg hover-scale">
                         <div class="text-theme-primary text-4xl mb-4">
-                            <i class="fas fa-coffee"></i>
+                            <span data-icon="coffee-cup"></span>
                         </div>
                         <h3 class="text-xl font-semibold mb-2">Kopi Premium</h3>
                         <p class="text-gray-600">100% kopi pilihan dengan kualitas terbaik</p>
                     </div>
                     <div class="bg-white p-6 rounded-xl shadow-lg hover-scale">
                         <div class="text-theme-primary text-4xl mb-4">
-                            <i class="fas fa-wifi"></i>
+                           <span data-icon="wifi"></span>
                         </div>
                         <h3 class="text-xl font-semibold mb-2">WiFi Gratis</h3>
                         <p class="text-gray-600">Nikmati koneksi internet cepat dan gratis</p>
                     </div>
                     <div class="bg-white p-6 rounded-xl shadow-lg hover-scale">
                         <div class="text-theme-primary text-4xl mb-4">
-                            <i class="fas fa-couch"></i>
+                            <span data-icon="couch"></span>
                         </div>
                         <h3 class="text-xl font-semibold mb-2">Ruangan Nyaman</h3>
                         <p class="text-gray-600">Suasana cozy yang bikin betah berlama-lama</p>
@@ -148,10 +167,6 @@
                 <div id="productsGrid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
                     </div>
 
-                <button id="cartFab" onclick="showCartModal()" class="fixed bottom-20 md:bottom-8 right-8 bg-theme-primary text-white w-16 h-16 rounded-full shadow-lg flex items-center justify-center text-2xl hover:bg-theme-primary-hover transition z-30">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span id="cartItemCountBadge" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center hidden">0</span>
-                </button>
             </div>
 
             <div id="queuePage" class="page-content hidden">
@@ -168,19 +183,19 @@
                             <h3 class="text-xl font-semibold mb-4">Informasi Kontak</h3>
                             <div class="space-y-3">
                                 <div class="flex items-center">
-                                    <i class="fas fa-map-marker-alt text-theme-primary w-6"></i>
+                                    <span data-icon="address" class="text-theme-primary w-6"></span>
                                     <span id="contactAddress">Jl. Contoh No. 123, Jakarta</span>
                                 </div>
                                 <div class="flex items-center">
-                                    <i class="fas fa-phone text-theme-primary w-6"></i>
+                                    <span data-icon="contact" class="text-theme-primary w-6"></span>
                                     <span id="contactPhone">+62 812-3456-7890</span>
                                 </div>
                                 <div class="flex items-center">
-                                    <i class="fas fa-envelope text-theme-primary w-6"></i>
+                                    <span data-icon="email" class="text-theme-primary w-6"></span>
                                     <span id="contactEmail">info@kopiku.com</span>
                                 </div>
                                 <div class="flex items-center">
-                                    <i class="fas fa-clock text-theme-primary w-6"></i>
+                                    <span data-icon="hours" class="text-theme-primary w-6"></span>
                                     <span id="contactHours">Senin - Minggu: 08:00 - 22:00</span>
                                 </div>
                             </div>
@@ -192,7 +207,7 @@
                                 <input type="email" placeholder="Email Anda" class="w-full p-3 border rounded-lg" required>
                                 <textarea placeholder="Pesan Anda" rows="4" class="w-full p-3 border rounded-lg" required></textarea>
                                 <button type="submit" class="w-full bg-theme-primary text-white py-3 rounded-lg hover:bg-theme-primary-hover transition">
-                                    <i class="fas fa-paper-plane mr-2"></i>Kirim Pesan
+                                    <span data-icon="send" class="mr-2"></span>Kirim Pesan
                                 </button>
                             </form>
                         </div>
@@ -202,20 +217,25 @@
              <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-lg z-40">
                 <nav class="flex justify-around py-2">
                     <button onclick="showPage('home')" class="nav-btn flex flex-col items-center text-gray-600 hover:text-theme-primary transition">
-                        <i class="fas fa-home text-xl"></i><span class="text-xs">Beranda</span>
+                        <span data-icon="home" class="text-xl"></span><span class="text-xs">Beranda</span>
                     </button>
                     <button onclick="showPage('menu')" class="nav-btn flex flex-col items-center text-gray-600 hover:text-theme-primary transition">
-                        <i class="fas fa-coffee text-xl"></i><span class="text-xs">Menu</span>
+                        <span data-icon="menu" class="text-xl"></span><span class="text-xs">Menu</span>
                     </button>
                     <button onclick="showPage('queue')" class="nav-btn flex flex-col items-center text-gray-600 hover:text-theme-primary transition">
-                        <i class="fas fa-users text-xl"></i><span class="text-xs">Antrian</span>
+                        <span data-icon="queue" class="text-xl"></span><span class="text-xs">Antrian</span>
                     </button>
                     <button onclick="showPage('contact')" class="nav-btn flex flex-col items-center text-gray-600 hover:text-theme-primary transition">
-                        <i class="fas fa-phone text-xl"></i><span class="text-xs">Kontak</span>
+                        <span data-icon="contact" class="text-xl"></span><span class="text-xs">Kontak</span>
                     </button>
                 </nav>
             </div>
         </main>
+
+        <button id="cartFab" onclick="showCartModal()" class="fixed bottom-20 md:bottom-8 right-8 bg-theme-primary text-white w-16 h-16 rounded-full shadow-lg flex items-center justify-center text-2xl hover:bg-theme-primary-hover transition z-30 hidden">
+            <span data-icon="cart"></span>
+            <span id="cartItemCountBadge" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center hidden">0</span>
+        </button>
 
         <footer class="bg-gray-800 text-white py-8 mt-16 pb-20 md:pb-8">
             <div class="container mx-auto px-4 text-center">
@@ -313,7 +333,7 @@
                             Batal
                         </button>
                         <button type="submit" class="flex-1 bg-theme-primary text-white py-3 rounded-lg hover:bg-theme-primary-hover transition">
-                            <i class="fas fa-check mr-2"></i>Proses Pesanan
+                            <span data-icon="checkout" class="mr-2"></span>Proses Pesanan
                         </button>
                     </div>
                 </div>
@@ -348,8 +368,8 @@
                         <button onclick="showAdminSection('reports')" class="admin-nav-btn w-full flex items-center justify-start p-3 rounded hover:bg-gray-700 transition">
                             <i class="fas fa-chart-bar mr-2"></i><span class="nav-text">Laporan</span>
                         </button>
-                        <button onclick="downloadDatabase()" class="admin-nav-btn w-full flex items-center justify-start p-3 rounded hover:bg-gray-700 transition">
-                            <i class="fas fa-download mr-2"></i><span class="nav-text">Download DB</span>
+                        <button onclick="showAdminSection('database')" class="admin-nav-btn w-full flex items-center justify-start p-3 rounded hover:bg-gray-700 transition">
+                            <i class="fas fa-database mr-2"></i><span class="nav-text">Database</span>
                         </button>
                         <button onclick="logoutAdmin()" class="admin-nav-btn w-full flex items-center justify-start p-3 rounded hover:bg-red-600 transition">
                             <i class="fas fa-sign-out-alt mr-2"></i><span class="nav-text">Logout</span>
@@ -549,6 +569,13 @@
                                     </div>
                                 </div>
                                 
+                                <div class="border-t pt-6">
+                                    <label class="block text-lg font-semibold mb-4">Ikon Halaman Utama</label>
+                                    <button type="button" onclick="showIconModal()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+                                        <i class="fas fa-palette mr-2"></i>Ubah Ikon Individual
+                                    </button>
+                                </div>
+                                
                                 <button type="submit" class="bg-theme-primary text-white px-6 py-3 rounded-lg hover:bg-theme-primary-hover transition">
                                     <i class="fas fa-save mr-2"></i>Simpan Pengaturan
                                 </button>
@@ -575,7 +602,31 @@
                                 </div>
                         </div>
                     </div>
-                </div>
+                    
+                    <div id="adminDatabase" class="admin-section hidden">
+                        <h1 class="text-3xl font-bold mb-6 hidden md:block">Manajemen Database</h1>
+                        <div class="bg-white rounded-lg shadow p-6 space-y-6">
+                            <h3 class="text-xl font-semibold mb-4">Aksi Database</h3>
+                            
+                            <div class="border p-4 rounded-lg">
+                                <h4 class="font-semibold mb-2">Download Database (Export)</h4>
+                                <p class="text-sm text-gray-600 mb-3">Unduh seluruh data aplikasi ke dalam file teks (.txt).</p>
+                                <button onclick="downloadDatabase()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
+                                    <i class="fas fa-download mr-2"></i>Download DB (.txt)
+                                </button>
+                            </div>
+
+                            <div class="border p-4 rounded-lg">
+                                <h4 class="font-semibold mb-2">Import Database</h4>
+                                <p class="text-sm text-gray-600 mb-3">Unggah data aplikasi dari file teks (.txt) yang sudah ada. Ini akan menimpa data saat ini.</p>
+                                <input type="file" id="importDbFile" accept=".txt" class="hidden" onchange="handleImportDatabase(event)">
+                                <button onclick="document.getElementById('importDbFile').click()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                                    <i class="fas fa-upload mr-2"></i>Pilih File Database
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
             </div>
         </div>
     </div>
@@ -662,7 +713,26 @@
             </form>
         </div>
     </div>
-
+    
+    <div id="iconModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl p-8 w-full max-w-4xl slide-in max-h-[90vh] overflow-y-auto">
+            <h2 class="text-2xl font-bold mb-6">Ubah Ikon Halaman Utama</h2>
+            <p class="text-sm text-gray-600 mb-4">Pilih ikon dari template yang tersedia untuk mengubah tampilan di halaman utama. Ikon Admin Panel (sidebar) tidak berubah.</p>
+            
+            <form onsubmit="saveIconCustomization(event)" class="space-y-4">
+                <div id="iconFormFields" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    </div>
+                <div class="flex space-x-4 border-t pt-4 mt-4">
+                    <button type="button" onclick="closeIconModal()" class="flex-1 bg-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-400 transition">
+                        Batal
+                    </button>
+                    <button type="submit" class="flex-1 bg-theme-primary text-white py-3 rounded-lg hover:bg-theme-primary-hover transition">
+                        <i class="fas fa-save mr-2"></i>Simpan Perubahan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
     <div id="toast" class="fixed bottom-24 md:bottom-4 right-4 z-50 hidden">
         <div class="bg-white rounded-lg shadow-xl p-4 flex items-center space-x-3 slide-in">
             <div id="toastIcon"></div>
@@ -674,6 +744,53 @@
     </div>
 
     <script>
+        // Global Templates for easy selection
+        const ICON_TEMPLATES = {
+            // Kopi & Makanan
+            'fas fa-coffee': 'Kopi Klasik',
+            'fas fa-mug-hot': 'Mug Panas',
+            'fas fa-carrot': 'Sayuran/Wortel',
+            'fas fa-leaf': 'Daun/Alam',
+            'fas fa-utensils': 'Alat Makan/Food',
+            
+            // Produk & Penjualan
+            'fas fa-box': 'Kotak/Produk',
+            'fas fa-boxes-packing': 'Box Banyak',
+            'fas fa-shopping-basket': 'Keranjang/Basket',
+            'fas fa-cart-shopping': 'Troli Belanja',
+            'fas fa-bag-shopping': 'Tas Belanja',
+            'fas fa-money-bill-wave': 'Uang/Pembayaran',
+            'fas fa-store': 'Toko/Jual',
+            
+            // Administrasi & Informasi
+            'fas fa-home': 'Rumah/Beranda',
+            'fas fa-database': 'Database',
+            'fas fa-list-check': 'Checklist/Daftar',
+            'fas fa-clipboard-check': 'Checklist Papan',
+            'fas fa-users': 'Antrian/Pengguna',
+            'fas fa-plus': 'Tambah/Add',
+            'fas fa-book-open': 'Buku/Menu',
+            
+            // Teknologi & Lainnya
+            'fas fa-wifi': 'WiFi',
+            'fas fa-couch': 'Sofa/Nyaman',
+            'fas fa-mobile-screen-button': 'Ponsel/Mobile',
+            'fas fa-square-phone': 'Ponsel Kotak',
+            'fas fa-laptop': 'Komputer/Laptop',
+            'fas fa-desktop': 'Desktop',
+            'fas fa-robot': 'AI/Robot',
+            'fas fa-medal': 'Medali',
+            'fas fa-ribbon': 'Pita Penghargaan',
+            
+            // Kontak & Lokasi
+            'fas fa-map-marker-alt': 'Alamat',
+            'fas fa-envelope': 'Email',
+            'fas fa-clock': 'Jam Operasi',
+            'fas fa-phone': 'Telepon/Kontak',
+            'fas fa-paper-plane': 'Kirim Pesan',
+            'fas fa-check': 'Cek/Selesai',
+        };
+
         class Database {
             constructor() { this.initializeDatabase(); }
             initializeDatabase() {
@@ -692,7 +809,15 @@
                                 { id: 'qris', name: 'QRIS', icon: 'fa-qrcode', active: true },
                                 { id: 'transfer', name: 'Transfer Bank', icon: 'fa-university', active: false }
                             ],
-                            theme: 'purple'
+                            theme: 'purple',
+                            // Ikon kustom default
+                            customIcons: { 
+                                'coffee-cup': 'fas fa-coffee', 'wifi': 'fas fa-wifi', 'couch': 'fas fa-couch',
+                                'home': 'fas fa-home', 'menu': 'fas fa-mug-hot', 'queue': 'fas fa-users', 
+                                'contact': 'fas fa-phone', 'admin': 'fas fa-user-shield', 'cart': 'fas fa-shopping-cart',
+                                'address': 'fas fa-map-marker-alt', 'email': 'fas fa-envelope', 'hours': 'fas fa-clock',
+                                'send': 'fas fa-paper-plane', 'checkout': 'fas fa-check', 'add': 'fas fa-plus'
+                            }
                         },
                         products: [
                             { id: 1, name: 'Espresso', category: 'coffee', description: 'Kopi klasik yang kuat', price: 15000, available: true },
@@ -785,6 +910,7 @@
 
         function initializeApp() {
             loadTheme();
+            applyIconTheme(); 
             loadSettings();
             loadProducts();
             loadQueue();
@@ -849,6 +975,130 @@
             } else {
                 applyTheme(savedTheme);
             }
+        }
+        
+        // Fungsi baru untuk mengganti ikon
+        function applyIconTheme() {
+            const data = db.getData();
+            const customIcons = data.settings.customIcons || {};
+            
+            // Icon mapping logic (purpose -> FA class)
+            const iconMap = {
+                // Default fallback icons (to ensure all data-icon have a value)
+                'coffee-cup': 'fas fa-coffee', 'wifi': 'fas fa-wifi', 'couch': 'fas fa-couch',
+                'home': 'fas fa-home', 'menu': 'fas fa-mug-hot', 'queue': 'fas fa-users', 
+                'contact': 'fas fa-phone', 'admin': 'fas fa-user-shield', 'cart': 'fas fa-shopping-cart',
+                'address': 'fas fa-map-marker-alt', 'email': 'fas fa-envelope', 'hours': 'fas fa-clock',
+                'send': 'fas fa-paper-plane', 'checkout': 'fas fa-check', 'add': 'fas fa-plus',
+                ...customIcons 
+            };
+            
+            document.querySelectorAll('[data-icon]').forEach(el => {
+                const iconName = el.getAttribute('data-icon');
+                const faClass = iconMap[iconName] || 'fas fa-question-circle'; 
+                
+                // Remove existing content and insert new <i> element
+                el.innerHTML = `<i class="${faClass}"></i>`;
+            });
+        }
+
+        function showIconModal() {
+            loadIconForm();
+            document.getElementById('iconModal').classList.remove('hidden');
+        }
+
+        function closeIconModal() {
+            document.getElementById('iconModal').classList.add('hidden');
+        }
+
+        function loadIconForm() {
+            const data = db.getData();
+            const customIcons = data.settings.customIcons;
+            const container = document.getElementById('iconFormFields');
+            container.innerHTML = '';
+
+            const iconLabels = {
+                'coffee-cup': 'Ikon Kopi/Logo',
+                'wifi': 'Ikon WiFi',
+                'couch': 'Ikon Ruangan Nyaman',
+                'home': 'Ikon Beranda (Menu)',
+                'menu': 'Ikon Menu',
+                'queue': 'Ikon Antrian',
+                'contact': 'Ikon Kontak/Telepon',
+                'admin': 'Ikon Tombol Admin',
+                'cart': 'Ikon Keranjang (FAB)',
+                'address': 'Ikon Alamat',
+                'email': 'Ikon Email',
+                'hours': 'Ikon Jam Operasional',
+                'send': 'Ikon Kirim Pesan',
+                'checkout': 'Ikon Proses Pesanan',
+                'add': 'Ikon Tambah ke Keranjang'
+            };
+
+            for (const key in customIcons) {
+                const label = iconLabels[key] || key;
+                const currentValue = customIcons[key];
+                
+                let optionsHtml = '';
+                
+                // Group all template icons for one field
+                for (const faClass in ICON_TEMPLATES) {
+                    const isSelected = faClass === currentValue ? 'selected' : '';
+                    const iconName = ICON_TEMPLATES[faClass];
+                    
+                    optionsHtml += `
+                        <label class="flex items-center p-2 border rounded-lg cursor-pointer hover:bg-gray-100 transition">
+                            <input type="radio" name="icon_select_${key}" value="${faClass}" class="form-radio text-theme-primary" ${isSelected} 
+                                onclick="document.querySelector('#icon-preview-${key} i').className = this.value">
+                            <span class="ml-3 flex-1 text-sm">${iconName}</span>
+                            <i class="${faClass} text-xl text-gray-500 w-6 text-center"></i>
+                        </label>
+                    `;
+                }
+
+                container.innerHTML += `
+                    <div class="space-y-3 bg-white p-4 rounded-lg shadow-md">
+                        <label class="block text-lg font-semibold">${label}</label>
+                        <div class="flex items-center space-x-4 mb-2">
+                            <p class="text-gray-600 text-sm">Pratinjau Saat Ini:</p>
+                            <span id="icon-preview-${key}" class="text-theme-primary text-2xl">
+                                <i class="${currentValue}"></i>
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-1 gap-2 max-h-64 overflow-y-auto border p-2 bg-gray-50">
+                            ${optionsHtml}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function saveIconCustomization(event) {
+            event.preventDefault();
+            const data = db.getData();
+            const newIcons = {};
+            
+            const iconKeys = Object.keys(data.settings.customIcons);
+            
+            iconKeys.forEach(key => {
+                // HANYA ambil nilai jika radio button TERPILIH untuk field tersebut
+                const selectedRadio = document.querySelector(`input[name="icon_select_${key}"]:checked`);
+                
+                // Jika ada yang dipilih, gunakan nilai tersebut
+                if (selectedRadio) {
+                    newIcons[key] = selectedRadio.value;
+                } else {
+                    // Jika tidak ada yang dipilih (karena user tidak mengubahnya), gunakan nilai yang sudah ada
+                    newIcons[key] = data.settings.customIcons[key];
+                }
+            });
+
+            data.settings.customIcons = newIcons;
+            db.saveData(data);
+            
+            applyIconTheme(); 
+            closeIconModal();
+            showToast('success', 'Berhasil', 'Ikon telah diperbarui!');
         }
         
         function showPage(pageId) {
@@ -917,6 +1167,7 @@
             products.forEach(product => {
                 productsContainer.innerHTML += createProductCard(product);
             });
+            applyIconTheme();
         }
 
         function createProductCard(product) {
@@ -925,7 +1176,7 @@
                      data-category="${product.category}" 
                      onclick="addToCart(${product.id})">
                     <div class="h-48 gradient-theme flex items-center justify-center">
-                        <i class="fas fa-coffee text-white text-4xl"></i>
+                        <span data-icon="coffee-cup" class="text-white text-4xl"></span>
                     </div>
                     <div class="p-4">
                         <h3 class="font-semibold text-lg mb-2">${product.name}</h3>
@@ -935,7 +1186,7 @@
                             <button onclick="event.stopPropagation(); addToCart(${product.id})" 
                                     class="bg-theme-primary text-white px-3 py-1 rounded-lg hover:bg-theme-primary-hover transition ${!product.available ? 'opacity-50 cursor-not-allowed' : ''}" 
                                     ${!product.available ? 'disabled' : ''}>
-                                <i class="fas fa-plus"></i>
+                                <span data-icon="add"></span>
                             </button>
                         </div>
                     </div>
@@ -1025,13 +1276,16 @@
 
         function updateCart() {
             const badge = document.getElementById('cartItemCountBadge');
+            const fab = document.getElementById('cartFab'); // Ambil elemen FAB
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
             if (totalItems > 0) {
                 badge.textContent = totalItems;
                 badge.classList.remove('hidden');
+                fab.classList.remove('hidden'); // Tampilkan FAB jika keranjang tidak kosong
             } else {
                 badge.classList.add('hidden');
+                fab.classList.add('hidden'); // Sembunyikan FAB jika keranjang kosong
             }
         }
         
@@ -1276,6 +1530,9 @@
                     break;
                 case 'reports': 
                     loadReportsSection(); 
+                    break;
+                case 'database':
+                    // No specific data loading needed, section content is static HTML with buttons
                     break;
             }
         }
@@ -1958,6 +2215,41 @@
             window.URL.revokeObjectURL(url);
             
             showToast('success', 'Berhasil', 'Database telah diunduh');
+        }
+        
+        function handleImportDatabase(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (confirm('PERINGATAN: Mengimpor database akan menimpa data aplikasi yang ada. Lanjutkan?')) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        // Simple validation to check if it looks like a valid structure
+                        if (importedData.settings && importedData.products && importedData.orders) {
+                            localStorage.setItem('kopiku_database', e.target.result);
+                            showToast('success', 'Import Berhasil', 'Database berhasil diimpor. Aplikasi akan dimuat ulang.');
+                            // Reload the application to apply new database
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1500);
+                        } else {
+                            showToast('error', 'Import Gagal', 'Struktur file database tidak valid.');
+                        }
+                    } catch (error) {
+                        showToast('error', 'Import Gagal', 'File tidak dalam format JSON yang benar.');
+                        console.error('Import Database Error:', error);
+                    }
+                };
+
+                reader.onerror = function() {
+                    showToast('error', 'Import Gagal', 'Gagal membaca file.');
+                };
+
+                reader.readAsText(file);
+            }
         }
 
         function sendContactMessage(event) {
