@@ -317,43 +317,43 @@
 
     <div id="adminPanel" class="fixed inset-0 bg-gray-100 z-50 hidden">
         <div class="flex h-screen relative">
-            <div id="adminSidebar" class="absolute inset-y-0 left-0 w-64 bg-gray-800 text-white transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 ease-in-out z-30">
+            <div id="adminSidebar" class="absolute inset-y-0 left-0 w-64 bg-gray-800 text-white transform -translate-x-full md:relative md:translate-x-0 transition-all duration-300 ease-in-out z-30">
                 <div class="p-4">
                     <h2 class="text-xl font-bold mb-6">Admin Panel</h2>
                     <nav class="space-y-2">
-                        <button onclick="showAdminSection('dashboard')" class="admin-nav-btn w-full text-left p-3 rounded hover:bg-gray-700 transition">
-                            <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                        <button onclick="showAdminSection('dashboard')" class="admin-nav-btn w-full flex items-center justify-start p-3 rounded hover:bg-gray-700 transition">
+                            <i class="fas fa-tachometer-alt mr-2"></i><span class="nav-text">Dashboard</span>
                         </button>
-                        <button onclick="showAdminSection('orders')" class="admin-nav-btn w-full text-left p-3 rounded hover:bg-gray-700 transition">
-                            <i class="fas fa-shopping-cart mr-2"></i>Pesanan
+                        <button onclick="showAdminSection('orders')" class="admin-nav-btn w-full flex items-center justify-start p-3 rounded hover:bg-gray-700 transition">
+                            <i class="fas fa-shopping-cart mr-2"></i><span class="nav-text">Pesanan</span>
                         </button>
-                        <button onclick="showAdminSection('queue')" class="admin-nav-btn w-full text-left p-3 rounded hover:bg-gray-700 transition">
-                            <i class="fas fa-users mr-2"></i>Antrian
+                        <button onclick="showAdminSection('queue')" class="admin-nav-btn w-full flex items-center justify-start p-3 rounded hover:bg-gray-700 transition">
+                            <i class="fas fa-users mr-2"></i><span class="nav-text">Antrian</span>
                         </button>
-                        <button onclick="showAdminSection('products')" class="admin-nav-btn w-full text-left p-3 rounded hover:bg-gray-700 transition">
-                            <i class="fas fa-box mr-2"></i>Produk
+                        <button onclick="showAdminSection('products')" class="admin-nav-btn w-full flex items-center justify-start p-3 rounded hover:bg-gray-700 transition">
+                            <i class="fas fa-box mr-2"></i><span class="nav-text">Produk</span>
                         </button>
-                        <button onclick="showAdminSection('users')" class="admin-nav-btn w-full text-left p-3 rounded hover:bg-gray-700 transition">
-                            <i class="fas fa-user-cog mr-2"></i>Pengguna
+                        <button onclick="showAdminSection('users')" class="admin-nav-btn w-full flex items-center justify-start p-3 rounded hover:bg-gray-700 transition">
+                            <i class="fas fa-user-cog mr-2"></i><span class="nav-text">Pengguna</span>
                         </button>
-                        <button onclick="showAdminSection('settings')" class="admin-nav-btn w-full text-left p-3 rounded hover:bg-gray-700 transition">
-                            <i class="fas fa-cog mr-2"></i>Pengaturan
+                        <button onclick="showAdminSection('settings')" class="admin-nav-btn w-full flex items-center justify-start p-3 rounded hover:bg-gray-700 transition">
+                            <i class="fas fa-cog mr-2"></i><span class="nav-text">Pengaturan</span>
                         </button>
-                        <button onclick="showAdminSection('reports')" class="admin-nav-btn w-full text-left p-3 rounded hover:bg-gray-700 transition">
-                            <i class="fas fa-chart-bar mr-2"></i>Laporan
+                        <button onclick="showAdminSection('reports')" class="admin-nav-btn w-full flex items-center justify-start p-3 rounded hover:bg-gray-700 transition">
+                            <i class="fas fa-chart-bar mr-2"></i><span class="nav-text">Laporan</span>
                         </button>
-                        <button onclick="downloadDatabase()" class="admin-nav-btn w-full text-left p-3 rounded hover:bg-gray-700 transition">
-                            <i class="fas fa-download mr-2"></i>Download DB
+                        <button onclick="downloadDatabase()" class="admin-nav-btn w-full flex items-center justify-start p-3 rounded hover:bg-gray-700 transition">
+                            <i class="fas fa-download mr-2"></i><span class="nav-text">Download DB</span>
                         </button>
-                        <button onclick="logoutAdmin()" class="admin-nav-btn w-full text-left p-3 rounded hover:bg-red-600 transition">
-                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        <button onclick="logoutAdmin()" class="admin-nav-btn w-full flex items-center justify-start p-3 rounded hover:bg-red-600 transition">
+                            <i class="fas fa-sign-out-alt mr-2"></i><span class="nav-text">Logout</span>
                         </button>
                     </nav>
                 </div>
             </div>
 
             <div class="flex-1 overflow-y-auto">
-                 <div class="md:hidden bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-20">
+                 <div class="bg-white shadow-md p-4 flex justify-between items-center sticky top-0 z-20">
                     <button id="sidebarToggle" class="text-gray-800">
                         <i class="fas fa-bars fa-lg"></i>
                     </button>
@@ -707,15 +707,38 @@
                 initializeApp();
             }, 1000);
             
+            const adminContent = document.querySelector('#adminPanel .flex-1.overflow-y-auto');
             const sidebar = document.getElementById('adminSidebar');
             const toggleButton = document.getElementById('sidebarToggle');
-            const adminContent = document.querySelector('#adminPanel .flex-1.overflow-y-auto');
+            
+            // ### PERUBAHAN ###: Logika sidebar toggle baru
             if (toggleButton) {
                 toggleButton.addEventListener('click', (event) => {
                     event.stopPropagation();
-                    sidebar.classList.toggle('-translate-x-full');
+                    const sidebarTitle = sidebar.querySelector('h2');
+                    const navButtons = sidebar.querySelectorAll('.admin-nav-btn');
+
+                    if (window.innerWidth < 768) {
+                        // Mobile view: Slide in/out
+                        sidebar.classList.toggle('-translate-x-full');
+                    } else {
+                        // Desktop view: Collapse/Expand
+                        sidebar.classList.toggle('w-64');
+                        sidebar.classList.toggle('w-20');
+                        sidebarTitle.classList.toggle('hidden');
+
+                        navButtons.forEach(btn => {
+                            const icon = btn.querySelector('i');
+                            const text = btn.querySelector('.nav-text');
+                            text.classList.toggle('hidden');
+                            icon.classList.toggle('mr-2');
+                            btn.classList.toggle('justify-start');
+                            btn.classList.toggle('justify-center');
+                        });
+                    }
                 });
             }
+
             if(adminContent) {
                 adminContent.addEventListener('click', () => {
                     if (window.innerWidth < 768 && !sidebar.classList.contains('-translate-x-full')) {
@@ -842,7 +865,6 @@
             const data = db.getData();
             const settings = data.settings;
             
-            // ### PERUBAHAN DI SINI ###
             document.title = settings.merchantName;
             
             document.getElementById('merchantName').textContent = settings.merchantName;
@@ -1181,7 +1203,7 @@
                  clickedBtn.classList.add('bg-gray-700');
             }
 
-            document.getElementById('adminSectionTitle').textContent = clickedBtn.textContent.trim();
+            document.getElementById('adminSectionTitle').textContent = clickedBtn.querySelector('.nav-text').textContent.trim();
 
             loadAdminSectionData(section);
             
