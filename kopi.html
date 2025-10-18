@@ -842,6 +842,9 @@
             const data = db.getData();
             const settings = data.settings;
             
+            // ### PERUBAHAN DI SINI ###
+            document.title = settings.merchantName;
+            
             document.getElementById('merchantName').textContent = settings.merchantName;
             document.getElementById('jumbotronTitle').textContent = settings.jumbotronTitle;
             document.getElementById('jumbotronSubtitle').textContent = settings.jumbotronSubtitle;
