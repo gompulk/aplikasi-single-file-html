@@ -330,457 +330,6 @@
                     </div>
                     <div class="flex space-x-4">
                         <button type="button" onclick="closeCheckoutModal()" class="flex-1 bg-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-400 transition">
-        dden">
-                <div class="max-w-4xl mx-auto">
-                    <h2 class="text-3xl font-bold mb-8 text-center">Hubungi Kami</h2>
-                    <div class="grid md:grid-cols-2 gap-8">
-                        <div class="bg-white p-6 rounded-xl shadow-lg">
-                            <h3 class="text-xl font-semibold mb-4">Informasi Kontak</h3>
-                            <div class="space-y-3">
-                                <div class="flex items-center">
-                                    <span data-icon="address" class="text-theme-primary w-6"></span>
-                                    <span id="contactAddress">Jl. Contoh No. 123, Jakarta</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <span data-icon="contact" class="text-theme-primary w-6"></span>
-                                    <span id="contactPhone">+62 812-3456-7890</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <span data-icon="email" class="text-theme-primary w-6"></span>
-                                    <span id="contactEmail">info@kopiku.com</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <span data-icon="hours" class="text-theme-primary w-6"></span>
-                                    <span id="contactHours">Senin - Minggu: 08:00 - 22:00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-lg">
-                            <h3 class="text-xl font-semibold mb-4">Kirim Pesan</h3>
-                            <form onsubmit="sendContactMessage(event)" class="space-y-4">
-                                <input type="text" placeholder="Nama Anda" class="w-full p-3 border rounded-lg" required>
-                                <input type="email" placeholder="Email Anda" class="w-full p-3 border rounded-lg" required>
-                                <textarea placeholder="Pesan Anda" rows="4" class="w-full p-3 border rounded-lg" required></textarea>
-                                <button type="submit" class="w-full bg-theme-primary text-white py-3 rounded-lg hover:bg-theme-primary-hover transition">
-                                    <span data-icon="send" class="mr-2"></span>Kirim Pesan
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-             <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-lg z-40">
-                <nav class="flex justify-around py-2">
-                    <button onclick="showPage('home')" class="nav-btn flex flex-col items-center text-gray-600 hover:text-theme-primary transition">
-                        <span data-icon="home" class="text-xl"></span><span class="text-xs">Beranda</span>
-                    </button>
-                    <button onclick="showPage('menu')" class="nav-btn flex flex-col items-center text-gray-600 hover:text-theme-primary transition">
-                        <span data-icon="menu" class="text-xl"></span><span class="text-xs">Menu</span>
-                    </button>
-                    <button onclick="showPage('queue')" class="nav-btn flex flex-col items-center text-gray-600 hover:text-theme-primary transition">
-                        <span data-icon="queue" class="text-xl"></span><span class="text-xs">Antrian</span>
-                    </button>
-                    <button onclick="showPage('contact')" class="nav-btn flex flex-col items-center text-gray-600 hover:text-theme-primary transition">
-                        <span data-icon="contact" class="text-xl"></span><span class="text-xs">Kontak</span>
-                    </button>
-                </nav>
-            </div>
-        </main>
-
-        <button id="cartFab" onclick="showCartModal()" class="fixed bottom-20 md:bottom-8 right-8 bg-theme-primary text-white w-16 h-16 rounded-full shadow-lg flex items-center justify-center text-2xl hover:bg-theme-primary-hover transition z-30 hidden">
-            <span data-icon="cart"></span>
-            <span id="cartItemCountBadge" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center hidden">0</span>
-        </button>
-
-        <footer class="bg-gray-800 text-white py-8 mt-16 pb-20 md:pb-8">
-            <div class="container mx-auto px-4 text-center">
-                <p>&copy; 2025 <span id="footerMerchantName">KopiKu</span>. All rights reserved.</p>
-                <div class="mt-4 flex justify-center space-x-4">
-                    <a href="#" class="hover:text-theme-primary transition"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="hover:text-theme-primary transition"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="hover:text-theme-primary transition"><i class="fab fa-twitter"></i></a>
-                </div>
-            </div>
-        </footer>
-    </div>
-
-    <div id="cartModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl p-6 w-full max-w-sm slide-in">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-bold">Keranjang</h2>
-                <button onclick="closeCartModal()" class="text-2xl text-gray-500 hover:text-gray-800">&times;</button>
-            </div>
-            <div id="modalCartItems" class="mb-4 max-h-64 overflow-y-auto pr-2">
-                </div>
-            <div class="border-t pt-4">
-                <div class="flex justify-between font-bold text-lg mb-4">
-                    <span>Total</span>
-                    <span id="modalCartTotal">Rp 0</span>
-                </div>
-                <div class="flex space-x-4">
-                    <button onclick="closeCartModal()" class="flex-1 bg-gray-300 text-gray-800 py-3 rounded-lg hover:bg-gray-400 transition">
-                        Tutup
-                    </button>
-                    <button onclick="proceedToCheckout()" class="flex-1 bg-theme-primary text-white py-3 rounded-lg hover:bg-theme-primary-hover transition">
-                        Checkout
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl p-8 w-full max-w-sm slide-in">
-            <h2 class="text-2xl font-bold mb-6 text-center">Login Admin</h2>
-            <form onsubmit="handleLogin(event)" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium mb-2">Username</label>
-                    <input type="text" id="loginUsername" class="w-full p-3 border rounded-lg" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-2">Password</label>
-                    <input type="password" id="loginPassword" class="w-full p-3 border rounded-lg" required>
-                </div>
-                <button type="submit" class="w-full bg-theme-primary text-white py-3 rounded-lg hover:bg-theme-primary-hover transition">
-                    <i class="fas fa-sign-in-alt mr-2"></i>Login
-                </button>
-            </form>
-            <button onclick="closeLoginModal()" class="w-full mt-4 text-gray-600 hover:text-gray-800 transition">
-                Batal
-            </button>
-        </div>
-    </div>
-
-    <div id="checkoutModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl p-6 md:p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto slide-in">
-            <h2 class="text-2xl font-bold mb-6">Checkout</h2>
-            <form onsubmit="processCheckout(event)" class="space-y-4">
-                <div class="grid md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Nama Lengkap</label>
-                        <input type="text" id="customerName" class="w-full p-3 border rounded-lg" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Nomor Telepon</label>
-                        <input type="tel" id="customerPhone" class="w-full p-3 border rounded-lg" required>
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-2">Email (Opsional)</label>
-                    <input type="email" id="customerEmail" class="w-full p-3 border rounded-lg">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-2">Metode Pembayaran</label>
-                    <div id="paymentMethods" class="grid grid-cols-2 gap-4">
-                        </div>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-2">Catatan (Opsional)</label>
-                    <textarea id="orderNotes" rows="3" class="w-full p-3 border rounded-lg"></textarea>
-                </div>
-                <div class="border-t pt-4">
-                    <div class="flex justify-between text-lg md:text-xl font-bold mb-4">
-                        <span>Total Pembayaran:</span>
-                        <span id="checkoutTotal">Rp 0</span>
-                    </div>
-                    <div class="flex space-x-4">
-                        <button type="button" onclick="closeCheckoutModal()" class="flex-1 bg-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-400 transition">
-                @keyframes slideIn { from { transform: translateY(-10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .hover-scale { transition: transform 0.2s; }
-        .hover-scale:hover { transform: scale(1.02); }
-        .loading-spinner { border: 3px solid #f3f3f3; border-top: 3px solid var(--theme-primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .print-only { display: none; }
-        @media print { .print-only { display: block; } .no-print { display: none; } }
-
-        /* Styling tambahan untuk dropdown pratinjau */
-        .icon-select-wrapper {
-            position: relative;
-        }
-        .icon-select-wrapper select {
-            padding-left: 3rem; /* Memberi ruang untuk ikon pratinjau */
-        }
-        .icon-preview-box {
-            position: absolute;
-            left: 0.75rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--theme-primary);
-            font-size: 1.25rem;
-            pointer-events: none; /* agar bisa klik selectnya */
-            z-index: 10;
-        }
-    </style>
-</head>
-<body class="bg-gray-50">
-    <div id="loadingScreen" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
-        <div class="text-center">
-            <div class="loading-spinner mx-auto mb-4"></div>
-            <p class="text-gray-600">Memuat aplikasi...</p>
-        </div>
-    </div>
-
-    <div id="app" class="min-h-screen">
-        <header class="bg-white shadow-lg sticky top-0 z-40">
-            <div class="container mx-auto px-4 py-4">
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center space-x-3">
-                        <span data-icon="coffee-cup" class="text-theme-primary text-2xl"></span>
-                        <h1 class="text-xl md:text-2xl font-bold text-gray-800" id="merchantName">KopiKu Coffee Shop</h1>
-                    </div>
-                    <nav class="hidden md:flex items-center space-x-4">
-                        <button onclick="showPage('home')" class="nav-btn text-gray-600 hover:text-theme-primary transition">
-                            <span data-icon="home" class="mr-2"></span>Beranda
-                        </button>
-                        <button onclick="showPage('menu')" class="nav-btn text-gray-600 hover:text-theme-primary transition">
-                            <span data-icon="menu" class="mr-2"></span>Menu
-                        </button>
-                        <button onclick="showPage('queue')" class="nav-btn text-gray-600 hover:text-theme-primary transition">
-                            <span data-icon="queue" class="mr-2"></span>Antrian
-                        </button>
-                        <button onclick="showPage('contact')" class="nav-btn text-gray-600 hover:text-theme-primary transition">
-                            <span data-icon="contact" class="mr-2"></span>Kontak
-                        </button>
-                        <button onclick="showLoginModal()" class="bg-theme-primary text-white px-4 py-2 rounded-lg hover:bg-theme-primary-hover transition">
-                            <span data-icon="admin" class="mr-2"></span>Admin
-                        </button>
-                    </nav>
-                    <div class="md:hidden">
-                         <button onclick="showLoginModal()" class="bg-theme-primary text-white px-3 py-2 rounded-lg hover:bg-theme-primary-hover transition">
-                            <i class="fas fa-user-shield"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <section id="jumbotron" class="relative gradient-theme text-white py-20">
-            <div class="container mx-auto px-4 text-center">
-                <h2 class="text-4xl md:text-5xl font-bold mb-4" id="jumbotronTitle">Selamat Datang di KopiKu</h2>
-                <p class="text-lg md:text-xl mb-8" id="jumbotronSubtitle">Nikmati kopi terbaik dengan suasana yang nyaman</p>
-                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-                    <button onclick="showPage('menu')" class="bg-white text-theme-primary px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition hover-scale">
-                        <span data-icon="cart" class="mr-2"></span>Pesan Sekarang
-                    </button>
-                    <button onclick="showPage('queue')" class="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-theme-primary transition hover-scale">
-                        <span data-icon="queue" class="mr-2"></span>Lihat Antrian
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <main class="container mx-auto px-4 py-8">
-            <div id="homePage" class="page-content">
-                <div class="grid md:grid-cols-3 gap-8 mb-12">
-                    <div class="bg-white p-6 rounded-xl shadow-lg hover-scale">
-                        <div class="text-theme-primary text-4xl mb-4">
-                            <span data-icon="coffee-cup"></span>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-2">Kopi Premium</h3>
-                        <p class="text-gray-600">100% kopi pilihan dengan kualitas terbaik</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl shadow-lg hover-scale">
-                        <div class="text-theme-primary text-4xl mb-4">
-                           <span data-icon="wifi"></span>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-2">WiFi Gratis</h3>
-                        <p class="text-gray-600">Nikmati koneksi internet cepat dan gratis</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl shadow-lg hover-scale">
-                        <div class="text-theme-primary text-4xl mb-4">
-                            <span data-icon="couch"></span>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-2">Ruangan Nyaman</h3>
-                        <p class="text-gray-600">Suasana cozy yang bikin betah berlama-lama</p>
-                    </div>
-                </div>
-
-                <div class="mb-12">
-                    <h2 class="text-3xl font-bold text-center mb-8">Produk Unggulan</h2>
-                    <div id="featuredProducts" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                        </div>
-                </div>
-            </div>
-
-            <div id="menuPage" class="page-content hidden">
-                <h2 class="text-3xl font-bold mb-8 text-center">Menu Kami</h2>
-                
-                <div class="flex justify-center mb-8">
-                    <div class="bg-white rounded-lg shadow-md p-1 inline-flex flex-wrap">
-                        <button onclick="filterProducts('all')" class="category-btn px-4 py-2 sm:px-6 rounded-md transition" data-category="all">Semua</button>
-                        <button onclick="filterProducts('coffee')" class="category-btn px-4 py-2 sm:px-6 rounded-md transition" data-category="coffee">Kopi</button>
-                        <button onclick="filterProducts('food')" class="category-btn px-4 py-2 sm:px-6 rounded-md transition" data-category="food">Makanan</button>
-                        <button onclick="filterProducts('dessert')" class="category-btn px-4 py-2 sm:px-6 rounded-md transition" data-category="dessert">Dessert</button>
-                        <button onclick="filterProducts('other')" class="category-btn px-4 py-2 sm:px-6 rounded-md transition" data-category="other">Lainnya</button>
-                    </div>
-                </div>
-
-                <div id="productsGrid" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
-                    </div>
-
-            </div>
-
-            <div id="queuePage" class="page-content hidden">
-                <h2 class="text-3xl font-bold mb-8 text-center">Antrian Saat Ini</h2>
-                <div id="queueList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    </div>
-            </div>
-
-            <div id="contactPage" class="page-content hidden">
-                <div class="max-w-4xl mx-auto">
-                    <h2 class="text-3xl font-bold mb-8 text-center">Hubungi Kami</h2>
-                    <div class="grid md:grid-cols-2 gap-8">
-                        <div class="bg-white p-6 rounded-xl shadow-lg">
-                            <h3 class="text-xl font-semibold mb-4">Informasi Kontak</h3>
-                            <div class="space-y-3">
-                                <div class="flex items-center">
-                                    <span data-icon="address" class="text-theme-primary w-6"></span>
-                                    <span id="contactAddress">Jl. Contoh No. 123, Jakarta</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <span data-icon="contact" class="text-theme-primary w-6"></span>
-                                    <span id="contactPhone">+62 812-3456-7890</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <span data-icon="email" class="text-theme-primary w-6"></span>
-                                    <span id="contactEmail">info@kopiku.com</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <span data-icon="hours" class="text-theme-primary w-6"></span>
-                                    <span id="contactHours">Senin - Minggu: 08:00 - 22:00</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-lg">
-                            <h3 class="text-xl font-semibold mb-4">Kirim Pesan</h3>
-                            <form onsubmit="sendContactMessage(event)" class="space-y-4">
-                                <input type="text" placeholder="Nama Anda" class="w-full p-3 border rounded-lg" required>
-                                <input type="email" placeholder="Email Anda" class="w-full p-3 border rounded-lg" required>
-                                <textarea placeholder="Pesan Anda" rows="4" class="w-full p-3 border rounded-lg" required></textarea>
-                                <button type="submit" class="w-full bg-theme-primary text-white py-3 rounded-lg hover:bg-theme-primary-hover transition">
-                                    <span data-icon="send" class="mr-2"></span>Kirim Pesan
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-             <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-lg z-40">
-                <nav class="flex justify-around py-2">
-                    <button onclick="showPage('home')" class="nav-btn flex flex-col items-center text-gray-600 hover:text-theme-primary transition">
-                        <span data-icon="home" class="text-xl"></span><span class="text-xs">Beranda</span>
-                    </button>
-                    <button onclick="showPage('menu')" class="nav-btn flex flex-col items-center text-gray-600 hover:text-theme-primary transition">
-                        <span data-icon="menu" class="text-xl"></span><span class="text-xs">Menu</span>
-                    </button>
-                    <button onclick="showPage('queue')" class="nav-btn flex flex-col items-center text-gray-600 hover:text-theme-primary transition">
-                        <span data-icon="queue" class="text-xl"></span><span class="text-xs">Antrian</span>
-                    </button>
-                    <button onclick="showPage('contact')" class="nav-btn flex flex-col items-center text-gray-600 hover:text-theme-primary transition">
-                        <span data-icon="contact" class="text-xl"></span><span class="text-xs">Kontak</span>
-                    </button>
-                </nav>
-            </div>
-        </main>
-
-        <button id="cartFab" onclick="showCartModal()" class="fixed bottom-20 md:bottom-8 right-8 bg-theme-primary text-white w-16 h-16 rounded-full shadow-lg flex items-center justify-center text-2xl hover:bg-theme-primary-hover transition z-30 hidden">
-            <span data-icon="cart"></span>
-            <span id="cartItemCountBadge" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center hidden">0</span>
-        </button>
-
-        <footer class="bg-gray-800 text-white py-8 mt-16 pb-20 md:pb-8">
-            <div class="container mx-auto px-4 text-center">
-                <p>&copy; 2025 <span id="footerMerchantName">KopiKu</span>. All rights reserved.</p>
-                <div class="mt-4 flex justify-center space-x-4">
-                    <a href="#" class="hover:text-theme-primary transition"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="hover:text-theme-primary transition"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="hover:text-theme-primary transition"><i class="fab fa-twitter"></i></a>
-                </div>
-            </div>
-        </footer>
-    </div>
-
-    <div id="cartModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl p-6 w-full max-w-sm slide-in">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-bold">Keranjang</h2>
-                <button onclick="closeCartModal()" class="text-2xl text-gray-500 hover:text-gray-800">&times;</button>
-            </div>
-            <div id="modalCartItems" class="mb-4 max-h-64 overflow-y-auto pr-2">
-                </div>
-            <div class="border-t pt-4">
-                <div class="flex justify-between font-bold text-lg mb-4">
-                    <span>Total</span>
-                    <span id="modalCartTotal">Rp 0</span>
-                </div>
-                <div class="flex space-x-4">
-                    <button onclick="closeCartModal()" class="flex-1 bg-gray-300 text-gray-800 py-3 rounded-lg hover:bg-gray-400 transition">
-                        Tutup
-                    </button>
-                    <button onclick="proceedToCheckout()" class="flex-1 bg-theme-primary text-white py-3 rounded-lg hover:bg-theme-primary-hover transition">
-                        Checkout
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl p-8 w-full max-w-sm slide-in">
-            <h2 class="text-2xl font-bold mb-6 text-center">Login Admin</h2>
-            <form onsubmit="handleLogin(event)" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium mb-2">Username</label>
-                    <input type="text" id="loginUsername" class="w-full p-3 border rounded-lg" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-2">Password</label>
-                    <input type="password" id="loginPassword" class="w-full p-3 border rounded-lg" required>
-                </div>
-                <button type="submit" class="w-full bg-theme-primary text-white py-3 rounded-lg hover:bg-theme-primary-hover transition">
-                    <i class="fas fa-sign-in-alt mr-2"></i>Login
-                </button>
-            </form>
-            <button onclick="closeLoginModal()" class="w-full mt-4 text-gray-600 hover:text-gray-800 transition">
-                Batal
-            </button>
-        </div>
-    </div>
-
-    <div id="checkoutModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl p-6 md:p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto slide-in">
-            <h2 class="text-2xl font-bold mb-6">Checkout</h2>
-            <form onsubmit="processCheckout(event)" class="space-y-4">
-                <div class="grid md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Nama Lengkap</label>
-                        <input type="text" id="customerName" class="w-full p-3 border rounded-lg" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Nomor Telepon</label>
-                        <input type="tel" id="customerPhone" class="w-full p-3 border rounded-lg" required>
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-2">Email (Opsional)</label>
-                    <input type="email" id="customerEmail" class="w-full p-3 border rounded-lg">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-2">Metode Pembayaran</label>
-                    <div id="paymentMethods" class="grid grid-cols-2 gap-4">
-                        </div>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-2">Catatan (Opsional)</label>
-                    <textarea id="orderNotes" rows="3" class="w-full p-3 border rounded-lg"></textarea>
-                </div>
-                <div class="border-t pt-4">
-                    <div class="flex justify-between text-lg md:text-xl font-bold mb-4">
-                        <span>Total Pembayaran:</span>
-                        <span id="checkoutTotal">Rp 0</span>
-                    </div>
-                    <div class="flex space-x-4">
-                        <button type="button" onclick="closeCheckoutModal()" class="flex-1 bg-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-400 transition">
                             Batal
                         </button>
                         <button type="submit" class="flex-1 bg-theme-primary text-white py-3 rounded-lg hover:bg-theme-primary-hover transition">
@@ -1035,27 +584,20 @@
                     </div>
 
                     <div id="adminReports" class="admin-section hidden">
-                        <div class="flex flex-col md:flex-row justify-between md:items-center mb-6 gap-4">
+                        <div class="flex justify-between items-center mb-6">
                             <h1 class="text-3xl font-bold hidden md:block">Laporan</h1>
-                            <div class="flex flex-wrap gap-2">
-                                <input type="date" id="reportStartDate" class="p-2 border rounded-lg">
-                                <input type="date" id="reportEndDate" class="p-2 border rounded-lg">
-                                <button onclick="generateReport()" class="bg-theme-primary text-white px-4 py-2 rounded-lg hover:bg-theme-primary-hover transition">
-                                    <i class="fas fa-search mr-2"></i>Generate
-                                </button>
-                                <button onclick="printReport()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
-                                    <i class="fas fa-print mr-2"></i>Print
-                                </button>
-                            </div>
+                            <button onclick="exportOrdersReport()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition text-sm">
+                                <i class="fas fa-file-excel mr-2"></i>Export
+                            </button>
                         </div>
-                        <div class="bg-white rounded-lg shadow p-6">
+                        <div class="bg-white rounded-lg shadow overflow-x-auto">
                             <div id="reportContent">
                                 </div>
                         </div>
                     </div>
                     
                     <div id="adminDatabase" class="admin-section hidden">
-                        <h1 class="text-3xl font-bold mb-6 hidden md:block">Manajemen Database</h1>
+                        <h1 class="text-3xl font-bold hidden md:block">Manajemen Database</h1>
                         <div class="bg-white rounded-lg shadow p-6 space-y-6">
                             <h3 class="text-xl font-semibold mb-4">Aksi Database</h3>
                             
@@ -1164,26 +706,7 @@
             </form>
         </div>
     </div>
-    
-    <div id="iconModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-xl p-8 w-full max-w-4xl slide-in max-h-[90vh] overflow-y-auto">
-            <h2 class="text-2xl font-bold mb-6">Ubah Ikon Halaman Utama</h2>
-            <p class="text-sm text-gray-600 mb-4">Pilih ikon dari template yang tersedia untuk mengubah tampilan di halaman utama. Ikon Admin Panel (sidebar) tidak berubah.</p>
-            
-            <form onsubmit="saveIconCustomization(event)" class="space-y-4">
-                <div id="iconFormFields" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    </div>
-                <div class="flex space-x-4 border-t pt-4 mt-4">
-                    <button type="button" onclick="closeIconModal()" class="flex-1 bg-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-400 transition">
-                        Batal
-                    </button>
-                    <button type="submit" class="flex-1 bg-theme-primary text-white py-3 rounded-lg hover:bg-theme-primary-hover transition">
-                        <i class="fas fa-save mr-2"></i>Simpan Perubahan
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
+
     <div id="toast" class="fixed bottom-24 md:bottom-4 right-4 z-50 hidden">
         <div class="bg-white rounded-lg shadow-xl p-4 flex items-center space-x-3 slide-in">
             <div id="toastIcon"></div>
@@ -1366,7 +889,40 @@
             loadProducts();
             loadQueue();
             updateCart();
-            setActiveNav('home');
+            
+            // --- START NEW PERSISTENCE LOGIC ---
+            const isAdminLoggedIn = localStorage.getItem('kopiku_is_admin') === 'true';
+            const lastPage = localStorage.getItem('kopiku_current_page') || 'home';
+            
+            if (isAdminLoggedIn) {
+                // Jika Admin Logged In, langsung tampilkan Admin Panel
+                document.getElementById('adminPanel').classList.remove('hidden');
+                // Coba tampilkan section admin terakhir, default ke dashboard
+                const lastAdminSection = localStorage.getItem('kopiku_admin_section') || 'dashboard';
+                showAdminSection(lastAdminSection);
+                loadAdminData();
+            } else {
+                // Jika tidak, tampilkan halaman frontend terakhir
+                showPage(lastPage);
+            }
+            // --- END NEW PERSISTENCE LOGIC ---
+
+            // Tambahkan auto-refresh untuk Antrian (setiap 5 detik)
+            setInterval(function() {
+                // Periksa apakah pengguna berada di Panel Admin
+                const isAdminOpen = !document.getElementById('adminPanel').classList.contains('hidden');
+
+                if (isAdminOpen) {
+                    // Hanya refresh Antrian Admin jika halaman tersebut sedang aktif
+                    const isAdminQueueActive = !document.getElementById('adminQueue').classList.contains('hidden');
+                    if (isAdminQueueActive) {
+                        loadAdminQueue();
+                    }
+                } else if (!document.getElementById('queuePage').classList.contains('hidden')) {
+                    // Refresh halaman Antrian utama jika sedang aktif
+                    loadQueue();
+                }
+            }, 5000); // Refresh setiap 5 detik
         }
 
         const themes = {
@@ -1494,12 +1050,12 @@
                 
                 // Group all template icons for one field
                 for (const faClass in ICON_TEMPLATES) {
-                    const isSelected = faClass === currentValue ? 'selected' : '';
+                    const isChecked = faClass === currentValue ? 'checked' : '';
                     const iconName = ICON_TEMPLATES[faClass];
                     
                     optionsHtml += `
                         <label class="flex items-center p-2 border rounded-lg cursor-pointer hover:bg-gray-100 transition">
-                            <input type="radio" name="icon_select_${key}" value="${faClass}" class="form-radio text-theme-primary" ${isSelected} 
+                            <input type="radio" name="icon_select_${key}" value="${faClass}" class="form-radio text-theme-primary" ${isChecked} 
                                 onclick="document.querySelector('#icon-preview-${key} i').className = this.value">
                             <span class="ml-3 flex-1 text-sm">${iconName}</span>
                             <i class="${faClass} text-xl text-gray-500 w-6 text-center"></i>
@@ -1560,6 +1116,11 @@
             document.body.scrollTop = 0; 
             document.documentElement.scrollTop = 0; 
             setActiveNav(pageId);
+
+            // --- PERSISTENCE: Save current frontend page and clear admin state ---
+            localStorage.setItem('kopiku_current_page', pageId);
+            localStorage.removeItem('kopiku_is_admin');
+            // --------------------------------------------------------------------
         }
 
         function setActiveNav(pageId) {
@@ -1787,52 +1348,70 @@
         }
 
         function processCheckout(event) {
-            event.preventDefault();
+            event.preventDefault(); // MENCEGAH PAGE RELOAD
             
-            const data = db.getData();
-            const order = {
-                id: Date.now(),
-                orderNumber: `ORD${Date.now()}`,
-                customerName: document.getElementById('customerName').value,
-                customerPhone: document.getElementById('customerPhone').value,
-                customerEmail: document.getElementById('customerEmail').value,
-                paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value,
-                notes: document.getElementById('orderNotes').value,
-                items: [...cart],
-                totalAmount: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-                status: 'pending',
-                createdAt: new Date().toISOString()
-            };
-            
-            data.orders.push(order);
-            
-            if (order.paymentMethod === 'cash') {
-                const queueItem = {
-                    id: Date.now() + 1,
-                    queueNumber: generateQueueNumber(),
-                    orderId: order.id,
-                    customerName: order.customerName,
-                    customerPhone: order.customerPhone,
-                    status: 'waiting',
-                    createdAt: new Date().toISOString()
-                };
-                data.queue.push(queueItem);
-                order.status = 'paid';
+            // Cari tombol submit
+            const submitButton = event.target.querySelector('button[type="submit"]');
+
+            if (submitButton) {
+                // Nonaktifkan tombol untuk mencegah pengiriman ganda
+                submitButton.disabled = true;
+                submitButton.dataset.originalHtml = submitButton.innerHTML; // Simpan konten asli
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Memproses...';
             }
             
-            db.saveData(data);
-            
-            cart = [];
-            updateCart();
-            closeCheckoutModal();
-            loadQueue();
-            
-            showToast('success', 'Berhasil', `Pesanan ${order.orderNumber} telah dibuat`);
+            try {
+                const data = db.getData();
+                const order = {
+                    id: Date.now(),
+                    orderNumber: `ORD${Date.now()}`,
+                    customerName: document.getElementById('customerName').value,
+                    customerPhone: document.getElementById('customerPhone').value,
+                    customerEmail: document.getElementById('customerEmail').value,
+                    paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value,
+                    notes: document.getElementById('orderNotes').value,
+                    items: [...cart],
+                    totalAmount: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                    status: 'pending', // Semua pesanan baru masuk sebagai pending, menunggu konfirmasi Admin.
+                    createdAt: new Date().toISOString()
+                };
+                
+                data.orders.push(order);
+                
+                // Hapus logika lama yang langsung mengubah status/menambahkan ke antrian.
+                // Logika Antrian sepenuhnya diatur oleh Admin melalui panel setelah ini.
+                
+                db.saveData(data);
+                
+                cart = [];
+                updateCart();
+                closeCheckoutModal();
+                
+                showToast('success', 'Berhasil', `Pesanan ${order.orderNumber} telah dibuat. Silakan tunggu konfirmasi.`);
+
+            } catch (error) {
+                showToast('error', 'Kesalahan', 'Terjadi kesalahan saat memproses checkout.');
+                console.error("Checkout Error:", error);
+
+                // Jika terjadi error, aktifkan kembali tombol dan reset teks
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = submitButton.dataset.originalHtml;
+                }
+            }
         }
 
         function generateQueueNumber() {
             const data = db.getData();
-            const lastQueue = data.queue.sort((a, b) => b.id - a.id)[0];
+            // Hanya hitung antrian yang masih aktif (waiting, called)
+            const activeQueue = data.queue.filter(q => q.status === 'waiting' || q.status === 'called');
+
+            if (activeQueue.length === 0) return 'A001';
+
+            // Ambil nomor antrian terakhir dari semua antrian yang pernah ada, tidak hanya yang aktif.
+            const allQueuesSorted = data.queue.sort((a, b) => b.id - a.id);
+            const lastQueue = allQueuesSorted[0];
+
             if (!lastQueue) return 'A001';
             
             const lastNumber = parseInt(lastQueue.queueNumber.substring(1));
@@ -1845,6 +1424,15 @@
             
             const queueList = document.getElementById('queueList');
             queueList.innerHTML = '';
+
+            const statusTextMap = {
+                'waiting': 'Pesanan sedang dibuat', 
+                'called': 'Silakan ambil pesanan anda', 
+                'completed': 'Pesanan Selesai Diambil', 
+                'cancelled': 'Dibatalkan', 
+                'paid': 'Menunggu Proses Pembuatan', 
+                'pending': 'Menunggu Konfirmasi Pembayaran' 
+            };
             
             if (queue.length === 0) {
                 queueList.innerHTML = '<p class="text-center text-gray-500 col-span-full">Tidak ada antrian saat ini</p>';
@@ -1856,8 +1444,12 @@
                     'waiting': 'bg-yellow-100 text-yellow-800',
                     'called': 'bg-blue-100 text-blue-800',
                     'completed': 'bg-green-100 text-green-800',
-                    'cancelled': 'bg-red-100 text-red-800'
+                    'cancelled': 'bg-red-100 text-red-800',
+                    'paid': 'bg-gray-400 text-white',
+                    'pending': 'bg-gray-100 text-gray-800'
                 }[item.status] || 'bg-gray-100 text-gray-800';
+
+                const statusText = statusTextMap[item.status] || item.status;
                 
                 queueList.innerHTML += `
                     <div class="bg-white rounded-lg shadow-lg p-6 hover-scale">
@@ -1868,7 +1460,7 @@
                                 <p class="text-gray-600 text-sm">${item.customerPhone}</p>
                             </div>
                             <span class="px-3 py-1 rounded-full text-sm font-semibold ${statusColor}">
-                                ${item.status}
+                                ${statusText}
                             </span>
                         </div>
                         <div class="text-sm text-gray-500">
@@ -1898,6 +1490,9 @@
             
             if (user) {
                 currentUser = user;
+                // --- PERSISTENCE: Set admin state ---
+                localStorage.setItem('kopiku_is_admin', 'true');
+                // ------------------------------------
                 closeLoginModal();
                 showAdminPanel();
                 showToast('success', 'Login Berhasil', `Selamat datang, ${user.fullName}`);
@@ -1908,17 +1503,35 @@
 
         function showAdminPanel() {
             document.getElementById('adminPanel').classList.remove('hidden');
-            showAdminSection('dashboard');
+            
+            // Coba muat section terakhir dari local storage
+            const lastAdminSection = localStorage.getItem('kopiku_admin_section') || 'dashboard';
+            showAdminSection(lastAdminSection); 
+            
             loadAdminData();
+
+            // Pastikan status login tersimpan
+            localStorage.setItem('kopiku_is_admin', 'true');
         }
 
         function logoutAdmin() {
             currentUser = null;
+            // --- PERSISTENCE: Clear admin state ---
+            localStorage.removeItem('kopiku_is_admin');
+            localStorage.removeItem('kopiku_admin_section');
+            // --------------------------------------
             document.getElementById('adminPanel').classList.add('hidden');
             showToast('success', 'Logout Berhasil', 'Anda telah keluar dari panel admin');
+            // Arahkan kembali ke halaman utama terakhir yang tersimpan atau default
+            showPage(localStorage.getItem('kopiku_current_page') || 'home'); 
         }
 
         function showAdminSection(section) {
+            
+            // --- PERSISTENCE: Save current admin section ---
+            localStorage.setItem('kopiku_admin_section', section);
+            // ------------------------------------------------
+            
             document.querySelectorAll('.admin-section').forEach(sec => {
                 sec.classList.add('hidden');
             });
@@ -1948,11 +1561,11 @@
             const data = db.getData();
             
             document.getElementById('totalOrders').textContent = data.orders.length;
-            document.getElementById('activeQueue').textContent = data.queue.filter(q => q.status === 'waiting').length;
+            document.getElementById('activeQueue').textContent = data.queue.filter(q => q.status === 'waiting' || q.status === 'called').length;
             document.getElementById('totalProducts').textContent = data.products.length;
             
             const totalRevenue = data.orders
-                .filter(o => o.status === 'paid' || o.status === 'completed')
+                .filter(o => o.status === 'paid' || o.status === 'completed' || o.status === 'waiting')
                 .reduce((sum, o) => sum + o.totalAmount, 0);
             document.getElementById('totalRevenue').textContent = `Rp ${totalRevenue.toLocaleString()}`;
         }
@@ -2003,8 +1616,18 @@
                     'pending': 'bg-yellow-100 text-yellow-800',
                     'paid': 'bg-blue-100 text-blue-800',
                     'completed': 'bg-green-100 text-green-800',
-                    'cancelled': 'bg-red-100 text-red-800'
+                    'cancelled': 'bg-red-100 text-red-800',
+                    'waiting': 'bg-purple-100 text-purple-800' // Added for clarity
                 }[order.status] || 'bg-gray-100 text-gray-800';
+
+                const statusTextMap = {
+                    'pending': 'pending',
+                    'paid': 'dibayar',
+                    'completed': 'selesai',
+                    'cancelled': 'dibatalkan',
+                    'waiting': 'antrian'
+                };
+                const statusText = statusTextMap[order.status] || order.status;
                 
                 ordersTable.innerHTML += `
                     <tr>
@@ -2012,14 +1635,15 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm">${order.customerName}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">Rp ${order.totalAmount.toLocaleString()}</td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 py-1 rounded-full text-xs font-semibold ${statusColor}">${order.status}</span>
+                            <span class="px-2 py-1 rounded-full text-xs font-semibold ${statusColor}">${statusText}</span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex space-x-2">
-                                ${order.status === 'pending' ? `<button onclick="confirmPayment(${order.id})" class="text-green-600 hover:text-green-800"><i class="fas fa-check"></i></button>` : ''}
-                                ${order.status === 'paid' ? `<button onclick="addToQueue(${order.id})" class="text-blue-600 hover:text-blue-800"><i class="fas fa-users"></i></button>` : ''}
-                                ${order.status === 'waiting' ? `<button onclick="callCustomer(${order.id})" class="text-purple-600 hover:text-purple-800"><i class="fas fa-bullhorn"></i></button>` : ''}
-                                <button onclick="deleteOrder(${order.id})" class="text-red-600 hover:text-red-800"><i class="fas fa-trash"></i></button>
+                            <div class="flex space-x-4 items-center">
+                                ${order.status === 'pending' ? `<button onclick="confirmPayment(${order.id})" class="text-green-600 hover:text-green-800 p-2" title="Konfirmasi Pembayaran"><i class="fas fa-check"></i></button>` : ''}
+                                ${order.status === 'paid' ? `<button onclick="addToQueue(${order.id})" class="text-blue-600 hover:text-blue-800 p-2" title="Tambahkan ke Antrian"><i class="fas fa-users"></i></button>` : ''}
+                                ${order.status === 'waiting' ? `<button onclick="callCustomer(${order.id})" class="text-purple-600 hover:text-purple-800 p-2" title="Panggil Pelanggan"><i class="fas fa-bullhorn"></i></button>` : ''}
+                                ${order.status === 'completed' ? `<button onclick="printReceipt(${order.id})" class="text-blue-600 hover:text-blue-800 p-2" title="Cetak Struk"><i class="fas fa-print"></i></button>` : ''}
+                                <button onclick="deleteOrder(${order.id})" class="text-red-600 hover:text-red-800 p-2" title="Hapus Pesanan"><i class="fas fa-trash"></i></button>
                             </div>
                         </td>
                     </tr>
@@ -2056,9 +1680,11 @@
             const data = db.getData();
             const order = data.orders.find(o => o.id === orderId);
             if (order) {
-                order.status = 'paid';
+                // Konfirmasi pembayaran selesai, status menjadi paid
+                order.status = 'paid'; 
                 db.saveData(data);
                 loadOrdersTable();
+                loadAdminData(); // Update dashboard
                 showToast('success', 'Berhasil', 'Pembayaran telah dikonfirmasi');
             }
         }
@@ -2066,7 +1692,14 @@
         function addToQueue(orderId) {
             const data = db.getData();
             const order = data.orders.find(o => o.id === orderId);
-            if (order) {
+            if (order && order.status === 'paid') {
+                // Cek apakah sudah ada di antrian (untuk mencegah duplikasi jika double klik)
+                const existingQueueItem = data.queue.find(q => q.orderId === orderId);
+                if (existingQueueItem) {
+                    showToast('warning', 'Sudah Ada', 'Pesanan sudah berada di antrian.');
+                    return;
+                }
+
                 const queueItem = {
                     id: Date.now(),
                     queueNumber: generateQueueNumber(),
@@ -2077,31 +1710,173 @@
                     createdAt: new Date().toISOString()
                 };
                 data.queue.push(queueItem);
-                order.status = 'waiting';
+                
+                // Ubah status pesanan menjadi 'waiting' (sedang diproses/di antrian)
+                order.status = 'waiting'; 
                 db.saveData(data);
+                
                 loadOrdersTable();
                 loadAdminQueue();
+                loadAdminData(); 
                 showToast('success', 'Berhasil', 'Pesanan ditambahkan ke antrian');
             }
         }
 
         function callCustomer(orderId) {
             const data = db.getData();
+            const order = data.orders.find(o => o.id === orderId);
             const queueItem = data.queue.find(q => q.orderId === orderId);
-            if (queueItem) {
+            
+            if (queueItem && order) {
+                // --- START TTS IMPLEMENTATION ---
+                const customerName = order.customerName;
+                // Ganti 'A' dengan 'A ' agar pembacaan TTS terdengar lebih jelas
+                const queueNumber = queueItem.queueNumber.replace('A', 'A '); 
+                
+                // Cek dukungan TTS
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(
+                        `Nomor antrian ${queueNumber}, atas nama ${customerName}, silakan ambil pesanan Anda.`
+                    );
+                    
+                    // Set suara robot (pilih suara yang tersedia, default ke yang pertama)
+                    utterance.lang = 'id-ID'; // Set bahasa Indonesia
+                    // Menggunakan rate dan pitch yang lebih robotik
+                    utterance.rate = 0.9; 
+                    utterance.pitch = 1.2; 
+                    
+                    window.speechSynthesis.speak(utterance);
+
+                    showToast('info', 'Memanggil', `Memanggil: Nomor ${queueItem.queueNumber} (${customerName})`);
+                } else {
+                    showToast('warning', 'Peringatan', 'Browser tidak mendukung fitur pemanggilan suara.');
+                }
+                // --- END TTS IMPLEMENTATION ---
+                
                 queueItem.status = 'called';
                 db.saveData(data);
                 loadAdminQueue();
-                showToast('success', 'Berhasil', 'Pelanggan telah dipanggil');
             }
+        }
+
+        function printReceipt(orderId) {
+            const data = db.getData();
+            const order = data.orders.find(o => o.id === orderId);
+            const settings = data.settings;
+
+            if (!order) {
+                showToast('error', 'Gagal', 'Pesanan tidak ditemukan.');
+                return;
+            }
+
+            const receiptDate = new Date(order.createdAt).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
+            const paymentMethodName = data.settings.paymentMethods.find(p => p.id === order.paymentMethod)?.name || order.paymentMethod;
+
+            let itemsHtml = order.items.map(item => `
+                <tr class="text-sm">
+                    <td>${item.name}</td>
+                    <td class="text-right">x ${item.quantity}</td>
+                    <td class="text-right">Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</td>
+                </tr>
+            `).join('');
+
+            const printContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Struk ${order.orderNumber}</title>
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+                    <style>
+                        body { font-family: 'Courier New', monospace; font-size: 12px; max-width: 80mm; margin: 0 auto; padding: 10px; }
+                        .receipt { width: 100%; border-collapse: collapse; }
+                        .receipt th, .receipt td { padding: 3px 0; }
+                        .header { text-align: center; margin-bottom: 10px; }
+                        .separator { border-top: 1px dashed #000; margin: 5px 0; padding: 5px 0; }
+                        .text-right { text-align: right; }
+                        .text-left { text-align: left; }
+                        .text-center { text-align: center; }
+                        @media print {
+                            body { margin: 0; padding: 0; }
+                            /* Non-zero padding/margin causes issues on some printers */
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h3>${settings.merchantName}</h3>
+                        <p>${settings.address}</p>
+                        <p>Tel: ${settings.phone}</p>
+                    </div>
+                    
+                    <div class="separator"></div>
+
+                    <p>No. Pesanan: ${order.orderNumber}</p>
+                    <p>Pelanggan: ${order.customerName}</p>
+                    <p>Tgl/Waktu: ${receiptDate}</p>
+
+                    <div class="separator"></div>
+
+                    <table class="receipt">
+                        <thead>
+                            <tr class="text-sm">
+                                <th class="text-left" style="width: 50%">Item</th>
+                                <th class="text-right" style="width: 20%">Qty</th>
+                                <th class="text-right" style="width: 30%">Jumlah</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${itemsHtml}
+                        </tbody>
+                    </table>
+                    
+                    <div class="separator"></div>
+                    
+                    <table class="receipt">
+                        <tr>
+                            <td class="text-right" style="width: 70%">Total:</td>
+                            <td class="text-right">Rp ${order.totalAmount.toLocaleString('id-ID')}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Pembayaran:</td>
+                            <td class="text-right">${paymentMethodName}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">Status:</td>
+                            <td class="text-right">${order.status.toUpperCase()}</td>
+                        </tr>
+                    </table>
+
+                    <div class="separator"></div>
+                    
+                    <div class="header" style="margin-top: 10px;">
+                        <p>Terima kasih atas kunjungan Anda!</p>
+                    </div>
+                </body>
+                </html>
+            `;
+
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(printContent);
+            printWindow.document.close();
+
+            printWindow.onload = function() {
+                printWindow.focus();
+                printWindow.print();
+                printWindow.close();
+            };
+
+            showToast('info', 'Cetak', `Mencetak struk pesanan ${order.orderNumber}`);
         }
 
         function deleteOrder(orderId) {
             if (confirm('Apakah Anda yakin ingin menghapus pesanan ini?')) {
                 const data = db.getData();
                 data.orders = data.orders.filter(o => o.id !== orderId);
+                data.queue = data.queue.filter(q => q.orderId !== orderId); // Also delete from queue if exists
                 db.saveData(data);
                 loadOrdersTable();
+                loadAdminQueue();
+                loadAdminData();
                 showToast('success', 'Berhasil', 'Pesanan telah dihapus');
             }
         }
@@ -2111,13 +1886,27 @@
             const adminQueueList = document.getElementById('adminQueueList');
             
             adminQueueList.innerHTML = '';
+            
+            const statusTextMap = {
+                'waiting': 'Pesanan sedang dibuat', 
+                'called': 'Silakan ambil pesanan anda', 
+                'completed': 'Pesanan Selesai Diambil', 
+                'cancelled': 'Dibatalkan', 
+                'paid': 'Menunggu Tambah Antrian', 
+                'pending': 'Menunggu Konfirmasi'
+            };
+
             data.queue.sort((a, b) => a.id - b.id).forEach(item => {
                 const statusColor = {
                     'waiting': 'bg-yellow-100 text-yellow-800',
                     'called': 'bg-blue-100 text-blue-800',
                     'completed': 'bg-green-100 text-green-800',
-                    'cancelled': 'bg-red-100 text-red-800'
+                    'cancelled': 'bg-red-100 text-red-800',
+                    'paid': 'bg-gray-400 text-white',
+                    'pending': 'bg-gray-100 text-gray-800'
                 }[item.status] || 'bg-gray-100 text-gray-800';
+
+                const statusText = statusTextMap[item.status] || item.status;
                 
                 adminQueueList.innerHTML += `
                     <div class="bg-white rounded-lg shadow-lg p-6">
@@ -2128,13 +1917,26 @@
                                 <p class="text-gray-600 text-sm">${item.customerPhone}</p>
                             </div>
                             <span class="px-3 py-1 rounded-full text-sm font-semibold ${statusColor}">
-                                ${item.status}
+                                ${statusText}
                             </span>
                         </div>
-                        <div class="flex space-x-2">
-                            ${item.status === 'waiting' ? `<button onclick="callCustomer(${item.orderId})" class="flex-1 bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition text-sm"><i class="fas fa-bullhorn mr-2"></i>Panggil</button>` : ''}
-                            ${item.status === 'called' ? `<button onclick="completeQueue(${item.id})" class="flex-1 bg-green-600 text-white py-2 rounded hover:bg-green-700 transition text-sm"><i class="fas fa-check mr-2"></i>Selesai</button>` : ''}
-                            <button onclick="deleteQueue(${item.id})" class="bg-red-600 text-white px-3 py-2 rounded hover:bg-red-700 transition">
+                        <div class="flex space-x-4">
+                            ${(item.status === 'waiting' || item.status === 'called') ? `
+                                <button onclick="callCustomer(${item.orderId})" class="flex-1 bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition text-sm">
+                                    <i class="fas fa-bullhorn mr-1"></i>Panggil
+                                </button>
+                            ` : ''}
+                            ${item.status === 'called' ? `
+                                <button onclick="completeQueue(${item.id})" class="flex-1 bg-green-600 text-white py-3 rounded hover:bg-green-700 transition text-sm">
+                                    <i class="fas fa-check mr-1"></i>Selesaikan
+                                </button>
+                            ` : ''}
+                            ${item.status === 'completed' ? `
+                                <button onclick="printReceipt(${item.orderId})" class="flex-1 bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition text-sm">
+                                    <i class="fas fa-print mr-1"></i>Cetak Struk
+                                </button>
+                            ` : ''}
+                            <button onclick="deleteQueue(${item.id})" class="bg-red-600 text-white px-4 py-3 rounded hover:bg-red-700 transition">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
@@ -2155,6 +1957,7 @@
                 db.saveData(data);
                 loadAdminQueue();
                 loadOrdersTable();
+                loadAdminData();
                 showToast('success', 'Berhasil', 'Antrian telah diselesaikan');
             }
         }
@@ -2162,9 +1965,19 @@
         function deleteQueue(queueId) {
             if (confirm('Apakah Anda yakin ingin menghapus antrian ini?')) {
                 const data = db.getData();
+                const queueItem = data.queue.find(q => q.id === queueId);
+                if (queueItem) {
+                    const order = data.orders.find(o => o.id === queueItem.orderId);
+                     // Set order status back to paid if deleted from queue before completion
+                    if (order && order.status === 'waiting') {
+                        order.status = 'paid';
+                    }
+                }
                 data.queue = data.queue.filter(q => q.id !== queueId);
                 db.saveData(data);
                 loadAdminQueue();
+                loadOrdersTable();
+                loadAdminData();
                 showToast('success', 'Berhasil', 'Antrian telah dihapus');
             }
         }
@@ -2325,7 +2138,9 @@
                                 <button onclick="editUser(${user.id})" class="text-blue-600 hover:text-blue-800">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                ${user.id !== 1 ? `<button onclick="deleteUser(${user.id})" class="text-red-600 hover:text-red-800"><i class="fas fa-trash"></i></button>` : ''}
+                                <button onclick="deleteUser(${user.id})" class="text-red-600 hover:text-red-800">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -2500,7 +2315,7 @@
             
             const totalOrders = filteredOrders.length;
             const totalRevenue = filteredOrders
-                .filter(o => o.status === 'paid' || o.status === 'completed')
+                .filter(o => o.status === 'paid' || o.status === 'completed' || o.status === 'waiting')
                 .reduce((sum, o) => sum + o.totalAmount, 0);
             
             const paymentMethods = {};
@@ -2618,41 +2433,6 @@
                 printWindow.close();
             };
         }
-        
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('id-ID', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric'
-            });
-        }
-
-        function exportOrdersReport() {
-            const data = db.getData();
-            const csvContent = [
-                ['No. Pesanan', 'Tanggal', 'Pelanggan', 'Telepon', 'Total', 'Metode Pembayaran', 'Status'],
-                ...data.orders.map(order => [
-                    order.orderNumber,
-                    new Date(order.createdAt).toLocaleDateString('id-ID'),
-                    order.customerName,
-                    order.customerPhone,
-                    order.totalAmount,
-                    order.paymentMethod,
-                    order.status
-                ])
-            ].map(row => row.join(',')).join('\n');
-            
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `laporan_pesanan_${new Date().toISOString().split('T')[0]}.csv`;
-            a.click();
-            window.URL.revokeObjectURL(url);
-            
-            showToast('success', 'Berhasil', 'Laporan telah diunduh');
-        }
 
         function downloadDatabase() {
             const data = db.getData();
@@ -2752,5 +2532,3 @@
     </script>
 </body>
 </html>
-
-
