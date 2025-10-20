@@ -765,7 +765,6 @@
             'fas fa-check': 'Cek/Selesai',
         };
 
-        // --- NEW ---
         // Global variable to hold all database data in memory
         let dbData = {};
 
@@ -783,7 +782,6 @@
                 showToast('error', 'Gagal Memuat', 'Tidak dapat memuat database.json.');
             }
         }
-        // --- END NEW ---
 
         let currentUser = null;
         let cart = [];
@@ -795,15 +793,25 @@
         let productsCurrentPage = 1;
         let ordersCurrentPage = 1;
         let usersCurrentPage = 1;
-
+        
+        // --- UPDATED INITIALIZATION LOGIC ---
         document.addEventListener('DOMContentLoaded', async function() {
-            await loadDatabase(); // Load data from JSON first
-            
-            setTimeout(() => {
-                document.getElementById('loadingScreen').style.display = 'none';
+            try {
+                // Wait for the database to be loaded or for the fallback to be created
+                await loadDatabase();
+                
+                // Initialize the main application
                 initializeApp();
-            }, 500); // Short delay to ensure UI elements are ready
-            
+            } catch (error) {
+                // Catch any errors during initialization
+                console.error("Failed to initialize the application:", error);
+                showToast('error', 'Inisialisasi Gagal', 'Terjadi kesalahan saat memulai aplikasi.');
+            } finally {
+                // ALWAYS hide the loading screen, regardless of success or failure
+                document.getElementById('loadingScreen').style.display = 'none';
+            }
+
+            // --- Event Listeners from original code ---
             const adminContent = document.querySelector('#adminPanel .flex-1.overflow-y-auto');
             const sidebar = document.getElementById('adminSidebar');
             const toggleButton = document.getElementById('sidebarToggle');
