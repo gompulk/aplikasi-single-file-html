@@ -603,16 +603,16 @@
                             
                             <div class="border p-4 rounded-lg">
                                 <h4 class="font-semibold mb-2">Download Database (Export)</h4>
-                                <p class="text-sm text-gray-600 mb-3">Unduh seluruh data aplikasi ke dalam file teks (.txt).</p>
+                                <p class="text-sm text-gray-600 mb-3">Unduh seluruh data aplikasi ke dalam file JSON (.json).</p>
                                 <button onclick="downloadDatabase()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
-                                    <i class="fas fa-download mr-2"></i>Download DB (.txt)
+                                    <i class="fas fa-download mr-2"></i>Download DB (.json)
                                 </button>
                             </div>
 
                             <div class="border p-4 rounded-lg">
                                 <h4 class="font-semibold mb-2">Import Database</h4>
-                                <p class="text-sm text-gray-600 mb-3">Unggah data aplikasi dari file teks (.txt) yang sudah ada. Ini akan menimpa data saat ini.</p>
-                                <input type="file" id="importDbFile" accept=".txt" class="hidden" onchange="handleImportDatabase(event)">
+                                <p class="text-sm text-gray-600 mb-3">Unggah data aplikasi dari file JSON (.json) yang sudah ada. Ini akan menimpa data saat ini.</p>
+                                <input type="file" id="importDbFile" accept=".json" class="hidden" onchange="handleImportDatabase(event)">
                                 <button onclick="document.getElementById('importDbFile').click()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
                                     <i class="fas fa-upload mr-2"></i>Pilih File Database
                                 </button>
@@ -765,61 +765,26 @@
             'fas fa-check': 'Cek/Selesai',
         };
 
-        class Database {
-            constructor() { this.initializeDatabase(); }
-            initializeDatabase() {
-                if (!localStorage.getItem('kopiku_database')) {
-                    const initialData = {
-                        settings: {
-                            merchantName: 'KopiKu Coffee Shop',
-                            jumbotronTitle: 'Selamat Datang di KopiKu',
-                            jumbotronSubtitle: 'Nikmati kopi terbaik dengan suasana yang nyaman',
-                            address: 'Jl. Contoh No. 123, Jakarta',
-                            phone: '+62 812-3456-7890',
-                            email: 'info@kopiku.com',
-                            hours: 'Senin - Minggu: 08:00 - 22:00',
-                            paymentMethods: [
-                                { id: 'cash', name: 'Tunai', icon: 'fa-money-bill', active: true },
-                                { id: 'qris', name: 'QRIS', icon: 'fa-qrcode', active: true },
-                                { id: 'transfer', name: 'Transfer Bank', icon: 'fa-university', active: false }
-                            ],
-                            theme: 'purple',
-                            // Ikon kustom default
-                            customIcons: { 
-                                'coffee-cup': 'fas fa-coffee', 'wifi': 'fas fa-wifi', 'couch': 'fas fa-couch',
-                                'home': 'fas fa-home', 'menu': 'fas fa-mug-hot', 'queue': 'fas fa-users', 
-                                'contact': 'fas fa-phone', 'admin': 'fas fa-user-shield', 'cart': 'fas fa-shopping-cart',
-                                'address': 'fas fa-map-marker-alt', 'email': 'fas fa-envelope', 'hours': 'fas fa-clock',
-                                'send': 'fas fa-paper-plane', 'checkout': 'fas fa-check', 'add': 'fas fa-plus'
-                            }
-                        },
-                        products: [
-                            { id: 1, name: 'Espresso', category: 'coffee', description: 'Kopi klasik yang kuat', price: 15000, available: true },
-                            { id: 2, name: 'Cappuccino', category: 'coffee', description: 'Espresso dengan susu foam', price: 25000, available: true },
-                            { id: 3, name: 'Caffe Latte', category: 'coffee', description: 'Espresso dengan susu panas', price: 28000, available: true },
-                            { id: 4, name: 'Americano', category: 'coffee', description: 'Espresso dengan air panas', price: 20000, available: true },
-                            { id: 5, name: 'Chocolate Cake', category: 'dessert', description: 'Kue coklat lembut', price: 30000, available: true },
-                            { id: 6, name: 'Croissant', category: 'food', description: 'Pastry buttery dari Perancis', price: 22000, available: true },
-                            { id: 7, name: 'Sandwich', category: 'food', description: 'Roti lapis dengan isi', price: 35000, available: true },
-                            { id: 8, name: 'Ice Cream', category: 'dessert', description: 'Es krim premium', price: 18000, available: true },
-                            { id: 9, name: 'Kopi Susu Gula Aren', category: 'coffee', description: 'Kopi susu kekinian', price: 22000, available: true },
-                            { id: 10, name: 'Red Velvet Latte', category: 'other', description: 'Minuman non-kopi', price: 27000, available: true },
-                            { id: 11, name: 'Matcha Latte', category: 'other', description: 'Teh hijau dengan susu', price: 27000, available: true },
-                            { id: 12, name: 'Donat Coklat', category: 'dessert', description: 'Donat empuk', price: 10000, available: true }
-                        ],
-                        orders: [],
-                        queue: [],
-                        users: [ { id: 1, username: 'admin', password: 'admin123', fullName: 'Administrator', role: 'admin' } ],
-                        messages: []
-                    };
-                    localStorage.setItem('kopiku_database', JSON.stringify(initialData));
-                }
-            }
-            getData() { return JSON.parse(localStorage.getItem('kopiku_database')); }
-            saveData(data) { localStorage.setItem('kopiku_database', JSON.stringify(data)); }
-        }
+        // --- NEW ---
+        // Global variable to hold all database data in memory
+        let dbData = {};
 
-        const db = new Database();
+        async function loadDatabase() {
+            try {
+                const response = await fetch('database.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                dbData = await response.json();
+            } catch (error) {
+                console.error("Could not load database:", error);
+                // Fallback to an empty structure if loading fails
+                dbData = { settings: {}, products: [], orders: [], queue: [], users: [], messages: [] };
+                showToast('error', 'Gagal Memuat', 'Tidak dapat memuat database.json.');
+            }
+        }
+        // --- END NEW ---
+
         let currentUser = null;
         let cart = [];
         let currentFilter = 'all';
@@ -831,11 +796,13 @@
         let ordersCurrentPage = 1;
         let usersCurrentPage = 1;
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadDatabase(); // Load data from JSON first
+            
             setTimeout(() => {
                 document.getElementById('loadingScreen').style.display = 'none';
                 initializeApp();
-            }, 1000);
+            }, 500); // Short delay to ensure UI elements are ready
             
             const adminContent = document.querySelector('#adminPanel .flex-1.overflow-y-auto');
             const sidebar = document.getElementById('adminSidebar');
@@ -890,39 +857,30 @@
             loadQueue();
             updateCart();
             
-            // --- START NEW PERSISTENCE LOGIC ---
             const isAdminLoggedIn = localStorage.getItem('kopiku_is_admin') === 'true';
             const lastPage = localStorage.getItem('kopiku_current_page') || 'home';
             
             if (isAdminLoggedIn) {
-                // Jika Admin Logged In, langsung tampilkan Admin Panel
                 document.getElementById('adminPanel').classList.remove('hidden');
-                // Coba tampilkan section admin terakhir, default ke dashboard
                 const lastAdminSection = localStorage.getItem('kopiku_admin_section') || 'dashboard';
                 showAdminSection(lastAdminSection);
                 loadAdminData();
             } else {
-                // Jika tidak, tampilkan halaman frontend terakhir
                 showPage(lastPage);
             }
-            // --- END NEW PERSISTENCE LOGIC ---
 
-            // Tambahkan auto-refresh untuk Antrian (setiap 5 detik)
             setInterval(function() {
-                // Periksa apakah pengguna berada di Panel Admin
                 const isAdminOpen = !document.getElementById('adminPanel').classList.contains('hidden');
 
                 if (isAdminOpen) {
-                    // Hanya refresh Antrian Admin jika halaman tersebut sedang aktif
                     const isAdminQueueActive = !document.getElementById('adminQueue').classList.contains('hidden');
                     if (isAdminQueueActive) {
                         loadAdminQueue();
                     }
                 } else if (!document.getElementById('queuePage').classList.contains('hidden')) {
-                    // Refresh halaman Antrian utama jika sedang aktif
                     loadQueue();
                 }
-            }, 5000); // Refresh setiap 5 detik
+            }, 5000); 
         }
 
         const themes = {
@@ -945,9 +903,7 @@
             const themeColors = themes[themeName];
             if (themeColors) {
                 setCssVariables(themeColors);
-                const data = db.getData();
-                data.settings.theme = themeName;
-                db.saveData(data);
+                dbData.settings.theme = themeName;
             }
         }
         
@@ -967,15 +923,12 @@
         function applyCustomTheme(hexColor) {
             const shades = generateColorShades(hexColor);
             setCssVariables(shades);
-            const data = db.getData();
-            data.settings.theme = hexColor;
-            db.saveData(data);
+            dbData.settings.theme = hexColor;
         }
 
         function loadTheme() {
-            const data = db.getData();
-            if(!data.settings.theme) data.settings.theme = 'purple';
-            const savedTheme = data.settings.theme;
+            if(!dbData.settings.theme) dbData.settings.theme = 'purple';
+            const savedTheme = dbData.settings.theme;
             if (savedTheme.startsWith('#')) {
                 applyCustomTheme(savedTheme);
                 document.getElementById('customColorPicker').value = savedTheme;
@@ -984,14 +937,9 @@
             }
         }
         
-        // Fungsi baru untuk mengganti ikon
         function applyIconTheme() {
-            const data = db.getData();
-            const customIcons = data.settings.customIcons || {};
-            
-            // Icon mapping logic (purpose -> FA class)
+            const customIcons = dbData.settings.customIcons || {};
             const iconMap = {
-                // Default fallback icons (to ensure all data-icon have a value)
                 'coffee-cup': 'fas fa-coffee', 'wifi': 'fas fa-wifi', 'couch': 'fas fa-couch',
                 'home': 'fas fa-home', 'menu': 'fas fa-mug-hot', 'queue': 'fas fa-users', 
                 'contact': 'fas fa-phone', 'admin': 'fas fa-user-shield', 'cart': 'fas fa-shopping-cart',
@@ -1003,8 +951,6 @@
             document.querySelectorAll('[data-icon]').forEach(el => {
                 const iconName = el.getAttribute('data-icon');
                 const faClass = iconMap[iconName] || 'fas fa-question-circle'; 
-                
-                // Remove existing content and insert new <i> element
                 el.innerHTML = `<i class="${faClass}"></i>`;
             });
         }
@@ -1019,36 +965,23 @@
         }
 
         function loadIconForm() {
-            const data = db.getData();
-            const customIcons = data.settings.customIcons;
+            const customIcons = dbData.settings.customIcons;
             const container = document.getElementById('iconFormFields');
             container.innerHTML = '';
 
             const iconLabels = {
-                'coffee-cup': 'Ikon Kopi/Logo',
-                'wifi': 'Ikon WiFi',
-                'couch': 'Ikon Ruangan Nyaman',
-                'home': 'Ikon Beranda (Menu)',
-                'menu': 'Ikon Menu',
-                'queue': 'Ikon Antrian',
-                'contact': 'Ikon Kontak/Telepon',
-                'admin': 'Ikon Tombol Admin',
-                'cart': 'Ikon Keranjang (FAB)',
-                'address': 'Ikon Alamat',
-                'email': 'Ikon Email',
-                'hours': 'Ikon Jam Operasional',
-                'send': 'Ikon Kirim Pesan',
-                'checkout': 'Ikon Proses Pesanan',
-                'add': 'Ikon Tambah ke Keranjang'
+                'coffee-cup': 'Ikon Kopi/Logo', 'wifi': 'Ikon WiFi', 'couch': 'Ikon Ruangan Nyaman',
+                'home': 'Ikon Beranda (Menu)', 'menu': 'Ikon Menu', 'queue': 'Ikon Antrian',
+                'contact': 'Ikon Kontak/Telepon', 'admin': 'Ikon Tombol Admin', 'cart': 'Ikon Keranjang (FAB)',
+                'address': 'Ikon Alamat', 'email': 'Ikon Email', 'hours': 'Ikon Jam Operasional',
+                'send': 'Ikon Kirim Pesan', 'checkout': 'Ikon Proses Pesanan', 'add': 'Ikon Tambah ke Keranjang'
             };
 
             for (const key in customIcons) {
                 const label = iconLabels[key] || key;
                 const currentValue = customIcons[key];
-                
                 let optionsHtml = '';
                 
-                // Group all template icons for one field
                 for (const faClass in ICON_TEMPLATES) {
                     const isChecked = faClass === currentValue ? 'checked' : '';
                     const iconName = ICON_TEMPLATES[faClass];
@@ -1082,60 +1015,45 @@
 
         function saveIconCustomization(event) {
             event.preventDefault();
-            const data = db.getData();
             const newIcons = {};
-            
-            const iconKeys = Object.keys(data.settings.customIcons);
+            const iconKeys = Object.keys(dbData.settings.customIcons);
             
             iconKeys.forEach(key => {
-                // HANYA ambil nilai jika radio button TERPILIH untuk field tersebut
                 const selectedRadio = document.querySelector(`input[name="icon_select_${key}"]:checked`);
-                
-                // Jika ada yang dipilih, gunakan nilai tersebut
                 if (selectedRadio) {
                     newIcons[key] = selectedRadio.value;
                 } else {
-                    // Jika tidak ada yang dipilih (karena user tidak mengubahnya), gunakan nilai yang sudah ada
-                    newIcons[key] = data.settings.customIcons[key];
+                    newIcons[key] = dbData.settings.customIcons[key];
                 }
             });
 
-            data.settings.customIcons = newIcons;
-            db.saveData(data);
-            
+            dbData.settings.customIcons = newIcons;
             applyIconTheme(); 
             closeIconModal();
             showToast('success', 'Berhasil', 'Ikon telah diperbarui!');
         }
         
         function showPage(pageId) {
-            document.querySelectorAll('.page-content').forEach(page => {
-                page.classList.add('hidden');
-            });
+            document.querySelectorAll('.page-content').forEach(page => page.classList.add('hidden'));
             document.getElementById(pageId + 'Page').classList.remove('hidden');
             document.body.scrollTop = 0; 
             document.documentElement.scrollTop = 0; 
             setActiveNav(pageId);
-
-            // --- PERSISTENCE: Save current frontend page and clear admin state ---
             localStorage.setItem('kopiku_current_page', pageId);
             localStorage.removeItem('kopiku_is_admin');
-            // --------------------------------------------------------------------
         }
 
         function setActiveNav(pageId) {
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('text-theme-primary');
                 btn.classList.add('text-gray-600');
-
                 if (btn.querySelector('span')) {
                     const mobilePageId = btn.querySelector('span').textContent.toLowerCase();
                      if(mobilePageId.includes(pageId) || (pageId === 'home' && mobilePageId.includes('beranda'))) {
                         btn.classList.remove('text-gray-600');
                         btn.classList.add('text-theme-primary');
                      }
-                } 
-                else {
+                } else {
                     if (btn.textContent.toLowerCase().includes(pageId) || 
                         (pageId === 'home' && btn.textContent.includes('Beranda')) ||
                         (pageId === 'menu' && btn.textContent.includes('Menu')) ||
@@ -1149,11 +1067,8 @@
         }
 
         function loadSettings() {
-            const data = db.getData();
-            const settings = data.settings;
-            
+            const settings = dbData.settings;
             document.title = settings.merchantName;
-            
             document.getElementById('merchantName').textContent = settings.merchantName;
             document.getElementById('jumbotronTitle').textContent = settings.jumbotronTitle;
             document.getElementById('jumbotronSubtitle').textContent = settings.jumbotronSubtitle;
@@ -1165,15 +1080,12 @@
         }
 
         function loadProducts() {
-            const data = db.getData();
-            const products = data.products;
-            
+            const products = dbData.products;
             const featuredContainer = document.getElementById('featuredProducts');
             featuredContainer.innerHTML = '';
             products.slice(0, 4).forEach(product => {
                 featuredContainer.innerHTML += createProductCard(product);
             });
-            
             const productsContainer = document.getElementById('productsGrid');
             productsContainer.innerHTML = '';
             products.forEach(product => {
@@ -1269,8 +1181,7 @@
         }
 
         function addToCart(productId) {
-            const data = db.getData();
-            const product = data.products.find(p => p.id === productId);
+            const product = dbData.products.find(p => p.id === productId);
             if (!product || !product.available) {
                 showToast('error', 'Maaf', 'Produk sedang tidak tersedia');
                 return;
@@ -1288,16 +1199,16 @@
 
         function updateCart() {
             const badge = document.getElementById('cartItemCountBadge');
-            const fab = document.getElementById('cartFab'); // Ambil elemen FAB
+            const fab = document.getElementById('cartFab');
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
             if (totalItems > 0) {
                 badge.textContent = totalItems;
                 badge.classList.remove('hidden');
-                fab.classList.remove('hidden'); // Tampilkan FAB jika keranjang tidak kosong
+                fab.classList.remove('hidden');
             } else {
                 badge.classList.add('hidden');
-                fab.classList.add('hidden'); // Sembunyikan FAB jika keranjang kosong
+                fab.classList.add('hidden');
             }
         }
         
@@ -1309,7 +1220,6 @@
                     cart = cart.filter(item => item.id !== productId);
                 }
                 updateCart();
-
                 if (isFromModal) {
                     showCartModal();
                 }
@@ -1326,11 +1236,10 @@
             const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             document.getElementById('checkoutTotal').textContent = `Rp ${total.toLocaleString()}`;
             
-            const data = db.getData();
             const paymentMethods = document.getElementById('paymentMethods');
             paymentMethods.innerHTML = '';
             
-            data.settings.paymentMethods.filter(pm => pm.active).forEach(method => {
+            dbData.settings.paymentMethods.filter(pm => pm.active).forEach(method => {
                 paymentMethods.innerHTML += `
                     <label class="flex items-center space-x-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
                         <input type="radio" name="paymentMethod" value="${method.id}" class="form-radio" required>
@@ -1348,20 +1257,16 @@
         }
 
         function processCheckout(event) {
-            event.preventDefault(); // MENCEGAH PAGE RELOAD
-            
-            // Cari tombol submit
+            event.preventDefault(); 
             const submitButton = event.target.querySelector('button[type="submit"]');
 
             if (submitButton) {
-                // Nonaktifkan tombol untuk mencegah pengiriman ganda
                 submitButton.disabled = true;
-                submitButton.dataset.originalHtml = submitButton.innerHTML; // Simpan konten asli
+                submitButton.dataset.originalHtml = submitButton.innerHTML;
                 submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Memproses...';
             }
             
             try {
-                const data = db.getData();
                 const order = {
                     id: Date.now(),
                     orderNumber: `ORD${Date.now()}`,
@@ -1372,28 +1277,20 @@
                     notes: document.getElementById('orderNotes').value,
                     items: [...cart],
                     totalAmount: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-                    status: 'pending', // Semua pesanan baru masuk sebagai pending, menunggu konfirmasi Admin.
+                    status: 'pending',
                     createdAt: new Date().toISOString()
                 };
                 
-                data.orders.push(order);
-                
-                // Hapus logika lama yang langsung mengubah status/menambahkan ke antrian.
-                // Logika Antrian sepenuhnya diatur oleh Admin melalui panel setelah ini.
-                
-                db.saveData(data);
-                
+                dbData.orders.push(order);
                 cart = [];
                 updateCart();
                 closeCheckoutModal();
-                
                 showToast('success', 'Berhasil', `Pesanan ${order.orderNumber} telah dibuat. Silakan tunggu konfirmasi.`);
 
             } catch (error) {
                 showToast('error', 'Kesalahan', 'Terjadi kesalahan saat memproses checkout.');
                 console.error("Checkout Error:", error);
 
-                // Jika terjadi error, aktifkan kembali tombol dan reset teks
                 if (submitButton) {
                     submitButton.disabled = false;
                     submitButton.innerHTML = submitButton.dataset.originalHtml;
@@ -1402,36 +1299,24 @@
         }
 
         function generateQueueNumber() {
-            const data = db.getData();
-            // Hanya hitung antrian yang masih aktif (waiting, called)
-            const activeQueue = data.queue.filter(q => q.status === 'waiting' || q.status === 'called');
-
+            const activeQueue = dbData.queue.filter(q => q.status === 'waiting' || q.status === 'called');
             if (activeQueue.length === 0) return 'A001';
-
-            // Ambil nomor antrian terakhir dari semua antrian yang pernah ada, tidak hanya yang aktif.
-            const allQueuesSorted = data.queue.sort((a, b) => b.id - a.id);
+            const allQueuesSorted = dbData.queue.sort((a, b) => b.id - a.id);
             const lastQueue = allQueuesSorted[0];
-
             if (!lastQueue) return 'A001';
-            
             const lastNumber = parseInt(lastQueue.queueNumber.substring(1));
             return `A${String(lastNumber + 1).padStart(3, '0')}`;
         }
 
         function loadQueue() {
-            const data = db.getData();
-            const queue = data.queue.sort((a, b) => a.id - b.id);
-            
+            const queue = dbData.queue.sort((a, b) => a.id - b.id);
             const queueList = document.getElementById('queueList');
             queueList.innerHTML = '';
 
             const statusTextMap = {
-                'waiting': 'Pesanan sedang dibuat', 
-                'called': 'Silakan ambil pesanan anda', 
-                'completed': 'Pesanan Selesai Diambil', 
-                'cancelled': 'Dibatalkan', 
-                'paid': 'Menunggu Proses Pembuatan', 
-                'pending': 'Menunggu Konfirmasi Pembayaran' 
+                'waiting': 'Pesanan sedang dibuat', 'called': 'Silakan ambil pesanan anda', 
+                'completed': 'Pesanan Selesai Diambil', 'cancelled': 'Dibatalkan', 
+                'paid': 'Menunggu Proses Pembuatan', 'pending': 'Menunggu Konfirmasi Pembayaran' 
             };
             
             if (queue.length === 0) {
@@ -1441,14 +1326,10 @@
             
             queue.forEach(item => {
                 const statusColor = {
-                    'waiting': 'bg-yellow-100 text-yellow-800',
-                    'called': 'bg-blue-100 text-blue-800',
-                    'completed': 'bg-green-100 text-green-800',
-                    'cancelled': 'bg-red-100 text-red-800',
-                    'paid': 'bg-gray-400 text-white',
-                    'pending': 'bg-gray-100 text-gray-800'
+                    'waiting': 'bg-yellow-100 text-yellow-800', 'called': 'bg-blue-100 text-blue-800',
+                    'completed': 'bg-green-100 text-green-800', 'cancelled': 'bg-red-100 text-red-800',
+                    'paid': 'bg-gray-400 text-white', 'pending': 'bg-gray-100 text-gray-800'
                 }[item.status] || 'bg-gray-100 text-gray-800';
-
                 const statusText = statusTextMap[item.status] || item.status;
                 
                 queueList.innerHTML += `
@@ -1459,13 +1340,9 @@
                                 <p class="font-semibold">${item.customerName}</p>
                                 <p class="text-gray-600 text-sm">${item.customerPhone}</p>
                             </div>
-                            <span class="px-3 py-1 rounded-full text-sm font-semibold ${statusColor}">
-                                ${statusText}
-                            </span>
+                            <span class="px-3 py-1 rounded-full text-sm font-semibold ${statusColor}">${statusText}</span>
                         </div>
-                        <div class="text-sm text-gray-500">
-                            <p>${new Date(item.createdAt).toLocaleString('id-ID')}</p>
-                        </div>
+                        <div class="text-sm text-gray-500"><p>${new Date(item.createdAt).toLocaleString('id-ID')}</p></div>
                     </div>
                 `;
             });
@@ -1481,18 +1358,13 @@
 
         function handleLogin(event) {
             event.preventDefault();
-            
             const username = document.getElementById('loginUsername').value;
             const password = document.getElementById('loginPassword').value;
-            
-            const data = db.getData();
-            const user = data.users.find(u => u.username === username && u.password === password);
+            const user = dbData.users.find(u => u.username === username && u.password === password);
             
             if (user) {
                 currentUser = user;
-                // --- PERSISTENCE: Set admin state ---
                 localStorage.setItem('kopiku_is_admin', 'true');
-                // ------------------------------------
                 closeLoginModal();
                 showAdminPanel();
                 showToast('success', 'Login Berhasil', `Selamat datang, ${user.fullName}`);
@@ -1503,54 +1375,33 @@
 
         function showAdminPanel() {
             document.getElementById('adminPanel').classList.remove('hidden');
-            
-            // Coba muat section terakhir dari local storage
             const lastAdminSection = localStorage.getItem('kopiku_admin_section') || 'dashboard';
             showAdminSection(lastAdminSection); 
-            
             loadAdminData();
-
-            // Pastikan status login tersimpan
             localStorage.setItem('kopiku_is_admin', 'true');
         }
 
         function logoutAdmin() {
             currentUser = null;
-            // --- PERSISTENCE: Clear admin state ---
             localStorage.removeItem('kopiku_is_admin');
             localStorage.removeItem('kopiku_admin_section');
-            // --------------------------------------
             document.getElementById('adminPanel').classList.add('hidden');
             showToast('success', 'Logout Berhasil', 'Anda telah keluar dari panel admin');
-            // Arahkan kembali ke halaman utama terakhir yang tersimpan atau default
             showPage(localStorage.getItem('kopiku_current_page') || 'home'); 
         }
 
         function showAdminSection(section) {
-            
-            // --- PERSISTENCE: Save current admin section ---
             localStorage.setItem('kopiku_admin_section', section);
-            // ------------------------------------------------
-            
-            document.querySelectorAll('.admin-section').forEach(sec => {
-                sec.classList.add('hidden');
-            });
+            document.querySelectorAll('.admin-section').forEach(sec => sec.classList.add('hidden'));
             const sectionEl = document.getElementById('admin' + section.charAt(0).toUpperCase() + section.slice(1));
             sectionEl.classList.remove('hidden');
-            
-            document.querySelectorAll('.admin-nav-btn').forEach(btn => {
-                btn.classList.remove('bg-gray-700');
-            });
-            
+            document.querySelectorAll('.admin-nav-btn').forEach(btn => btn.classList.remove('bg-gray-700'));
             const clickedBtn = Array.from(document.querySelectorAll('.admin-nav-btn')).find(btn => btn.getAttribute('onclick').includes(section));
             if(clickedBtn) {
                  clickedBtn.classList.add('bg-gray-700');
             }
-
             document.getElementById('adminSectionTitle').textContent = clickedBtn.querySelector('.nav-text').textContent.trim();
-
             loadAdminSectionData(section);
-            
             const sidebar = document.getElementById('adminSidebar');
             if (window.innerWidth < 768 && !sidebar.classList.contains('-translate-x-full')) {
                 sidebar.classList.add('-translate-x-full');
@@ -1558,52 +1409,28 @@
         }
 
         function loadAdminData() {
-            const data = db.getData();
-            
-            document.getElementById('totalOrders').textContent = data.orders.length;
-            document.getElementById('activeQueue').textContent = data.queue.filter(q => q.status === 'waiting' || q.status === 'called').length;
-            document.getElementById('totalProducts').textContent = data.products.length;
-            
-            const totalRevenue = data.orders
+            document.getElementById('totalOrders').textContent = dbData.orders.length;
+            document.getElementById('activeQueue').textContent = dbData.queue.filter(q => q.status === 'waiting' || q.status === 'called').length;
+            document.getElementById('totalProducts').textContent = dbData.products.length;
+            const totalRevenue = dbData.orders
                 .filter(o => o.status === 'paid' || o.status === 'completed' || o.status === 'waiting')
                 .reduce((sum, o) => sum + o.totalAmount, 0);
             document.getElementById('totalRevenue').textContent = `Rp ${totalRevenue.toLocaleString()}`;
         }
 
         function loadAdminSectionData(section) {
-            const data = db.getData();
-            
             switch(section) {
-                case 'orders': 
-                    ordersCurrentPage = 1;
-                    loadOrdersTable(); 
-                    break;
-                case 'queue': 
-                    loadAdminQueue(); 
-                    break;
-                case 'products': 
-                    productsCurrentPage = 1; 
-                    loadAdminProducts(); 
-                    break;
-                case 'users':
-                    usersCurrentPage = 1;
-                    loadUsersTable();
-                    break;
-                case 'settings': 
-                    loadSettingsForm(); 
-                    break;
-                case 'reports': 
-                    loadReportsSection(); 
-                    break;
-                case 'database':
-                    // No specific data loading needed, section content is static HTML with buttons
-                    break;
+                case 'orders': ordersCurrentPage = 1; loadOrdersTable(); break;
+                case 'queue': loadAdminQueue(); break;
+                case 'products': productsCurrentPage = 1; loadAdminProducts(); break;
+                case 'users': usersCurrentPage = 1; loadUsersTable(); break;
+                case 'settings': loadSettingsForm(); break;
+                case 'reports': loadReportsSection(); break;
             }
         }
         
 	function loadOrdersTable() {
-            const data = db.getData();
-            const orders = data.orders.sort((a, b) => b.id - a.id);
+            const orders = dbData.orders.sort((a, b) => b.id - a.id);
             const ordersTable = document.getElementById('ordersTable');
             ordersTable.innerHTML = '';
 
@@ -1613,19 +1440,13 @@
 
             paginatedOrders.forEach(order => {
                 const statusColor = {
-                    'pending': 'bg-yellow-100 text-yellow-800',
-                    'paid': 'bg-blue-100 text-blue-800',
-                    'completed': 'bg-green-100 text-green-800',
-                    'cancelled': 'bg-red-100 text-red-800',
-                    'waiting': 'bg-purple-100 text-purple-800' // Added for clarity
+                    'pending': 'bg-yellow-100 text-yellow-800', 'paid': 'bg-blue-100 text-blue-800',
+                    'completed': 'bg-green-100 text-green-800', 'cancelled': 'bg-red-100 text-red-800',
+                    'waiting': 'bg-purple-100 text-purple-800'
                 }[order.status] || 'bg-gray-100 text-gray-800';
-
                 const statusTextMap = {
-                    'pending': 'pending',
-                    'paid': 'dibayar',
-                    'completed': 'selesai',
-                    'cancelled': 'dibatalkan',
-                    'waiting': 'antrian'
+                    'pending': 'pending', 'paid': 'dibayar', 'completed': 'selesai',
+                    'cancelled': 'dibatalkan', 'waiting': 'antrian'
                 };
                 const statusText = statusTextMap[order.status] || order.status;
                 
@@ -1634,9 +1455,7 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm">${order.orderNumber}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">${order.customerName}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">Rp ${order.totalAmount.toLocaleString()}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 py-1 rounded-full text-xs font-semibold ${statusColor}">${statusText}</span>
-                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 py-1 rounded-full text-xs font-semibold ${statusColor}">${statusText}</span></td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex space-x-4 items-center">
                                 ${order.status === 'pending' ? `<button onclick="confirmPayment(${order.id})" class="text-green-600 hover:text-green-800 p-2" title="Konfirmasi Pembayaran"><i class="fas fa-check"></i></button>` : ''}
@@ -1657,17 +1476,10 @@
             const totalPages = Math.ceil(totalItems / itemsPerPage);
             paginationContainer.innerHTML = '';
             if (totalPages <= 1) return;
-
             paginationContainer.innerHTML = `
-                <button onclick="changeOrdersPage(-1)" class="w-full sm:w-auto bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 disabled:opacity-50" ${ordersCurrentPage === 1 ? 'disabled' : ''}>
-                    Sebelumnya
-                </button>
-                <span class="text-sm font-semibold my-2 sm:my-0">
-                    Halaman ${ordersCurrentPage} dari ${totalPages}
-                </span>
-                <button onclick="changeOrdersPage(1)" class="w-full sm:w-auto bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 disabled:opacity-50" ${ordersCurrentPage === totalPages ? 'disabled' : ''}>
-                    Berikutnya
-                </button>
+                <button onclick="changeOrdersPage(-1)" class="w-full sm:w-auto bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 disabled:opacity-50" ${ordersCurrentPage === 1 ? 'disabled' : ''}>Sebelumnya</button>
+                <span class="text-sm font-semibold my-2 sm:my-0">Halaman ${ordersCurrentPage} dari ${totalPages}</span>
+                <button onclick="changeOrdersPage(1)" class="w-full sm:w-auto bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 disabled:opacity-50" ${ordersCurrentPage === totalPages ? 'disabled' : ''}>Berikutnya</button>
             `;
         }
 
@@ -1677,44 +1489,30 @@
         }
 
         function confirmPayment(orderId) {
-            const data = db.getData();
-            const order = data.orders.find(o => o.id === orderId);
+            const order = dbData.orders.find(o => o.id === orderId);
             if (order) {
-                // Konfirmasi pembayaran selesai, status menjadi paid
                 order.status = 'paid'; 
-                db.saveData(data);
                 loadOrdersTable();
-                loadAdminData(); // Update dashboard
+                loadAdminData();
                 showToast('success', 'Berhasil', 'Pembayaran telah dikonfirmasi');
             }
         }
 
         function addToQueue(orderId) {
-            const data = db.getData();
-            const order = data.orders.find(o => o.id === orderId);
+            const order = dbData.orders.find(o => o.id === orderId);
             if (order && order.status === 'paid') {
-                // Cek apakah sudah ada di antrian (untuk mencegah duplikasi jika double klik)
-                const existingQueueItem = data.queue.find(q => q.orderId === orderId);
+                const existingQueueItem = dbData.queue.find(q => q.orderId === orderId);
                 if (existingQueueItem) {
                     showToast('warning', 'Sudah Ada', 'Pesanan sudah berada di antrian.');
                     return;
                 }
-
                 const queueItem = {
-                    id: Date.now(),
-                    queueNumber: generateQueueNumber(),
-                    orderId: order.id,
-                    customerName: order.customerName,
-                    customerPhone: order.customerPhone,
-                    status: 'waiting',
-                    createdAt: new Date().toISOString()
+                    id: Date.now(), queueNumber: generateQueueNumber(), orderId: order.id,
+                    customerName: order.customerName, customerPhone: order.customerPhone,
+                    status: 'waiting', createdAt: new Date().toISOString()
                 };
-                data.queue.push(queueItem);
-                
-                // Ubah status pesanan menjadi 'waiting' (sedang diproses/di antrian)
+                dbData.queue.push(queueItem);
                 order.status = 'waiting'; 
-                db.saveData(data);
-                
                 loadOrdersTable();
                 loadAdminQueue();
                 loadAdminData(); 
@@ -1723,157 +1521,53 @@
         }
 
         function callCustomer(orderId) {
-            const data = db.getData();
-            const order = data.orders.find(o => o.id === orderId);
-            const queueItem = data.queue.find(q => q.orderId === orderId);
-            
+            const order = dbData.orders.find(o => o.id === orderId);
+            const queueItem = dbData.queue.find(q => q.orderId === orderId);
             if (queueItem && order) {
-                // --- START TTS IMPLEMENTATION ---
                 const customerName = order.customerName;
-                // Ganti 'A' dengan 'A ' agar pembacaan TTS terdengar lebih jelas
                 const queueNumber = queueItem.queueNumber.replace('A', 'A '); 
-                
-                // Cek dukungan TTS
                 if ('speechSynthesis' in window) {
-                    const utterance = new SpeechSynthesisUtterance(
-                        `Nomor antrian ${queueNumber}, atas nama ${customerName}, silakan ambil pesanan Anda.`
-                    );
-                    
-                    // Set suara robot (pilih suara yang tersedia, default ke yang pertama)
-                    utterance.lang = 'id-ID'; // Set bahasa Indonesia
-                    // Menggunakan rate dan pitch yang lebih robotik
+                    const utterance = new SpeechSynthesisUtterance(`Nomor antrian ${queueNumber}, atas nama ${customerName}, silakan ambil pesanan Anda.`);
+                    utterance.lang = 'id-ID'; 
                     utterance.rate = 0.9; 
                     utterance.pitch = 1.2; 
-                    
                     window.speechSynthesis.speak(utterance);
-
                     showToast('info', 'Memanggil', `Memanggil: Nomor ${queueItem.queueNumber} (${customerName})`);
                 } else {
                     showToast('warning', 'Peringatan', 'Browser tidak mendukung fitur pemanggilan suara.');
                 }
-                // --- END TTS IMPLEMENTATION ---
-                
                 queueItem.status = 'called';
-                db.saveData(data);
                 loadAdminQueue();
             }
         }
 
         function printReceipt(orderId) {
-            const data = db.getData();
-            const order = data.orders.find(o => o.id === orderId);
-            const settings = data.settings;
-
+            const order = dbData.orders.find(o => o.id === orderId);
+            const settings = dbData.settings;
             if (!order) {
                 showToast('error', 'Gagal', 'Pesanan tidak ditemukan.');
                 return;
             }
-
             const receiptDate = new Date(order.createdAt).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
-            const paymentMethodName = data.settings.paymentMethods.find(p => p.id === order.paymentMethod)?.name || order.paymentMethod;
-
-            let itemsHtml = order.items.map(item => `
-                <tr class="text-sm">
-                    <td>${item.name}</td>
-                    <td class="text-right">x ${item.quantity}</td>
-                    <td class="text-right">Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</td>
-                </tr>
-            `).join('');
-
+            const paymentMethodName = dbData.settings.paymentMethods.find(p => p.id === order.paymentMethod)?.name || order.paymentMethod;
+            let itemsHtml = order.items.map(item => `<tr class="text-sm"><td>${item.name}</td><td class="text-right">x ${item.quantity}</td><td class="text-right">Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</td></tr>`).join('');
             const printContent = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Struk ${order.orderNumber}</title>
-                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-                    <style>
-                        body { font-family: 'Courier New', monospace; font-size: 12px; max-width: 80mm; margin: 0 auto; padding: 10px; }
-                        .receipt { width: 100%; border-collapse: collapse; }
-                        .receipt th, .receipt td { padding: 3px 0; }
-                        .header { text-align: center; margin-bottom: 10px; }
-                        .separator { border-top: 1px dashed #000; margin: 5px 0; padding: 5px 0; }
-                        .text-right { text-align: right; }
-                        .text-left { text-align: left; }
-                        .text-center { text-align: center; }
-                        @media print {
-                            body { margin: 0; padding: 0; }
-                            /* Non-zero padding/margin causes issues on some printers */
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="header">
-                        <h3>${settings.merchantName}</h3>
-                        <p>${settings.address}</p>
-                        <p>Tel: ${settings.phone}</p>
-                    </div>
-                    
-                    <div class="separator"></div>
-
-                    <p>No. Pesanan: ${order.orderNumber}</p>
-                    <p>Pelanggan: ${order.customerName}</p>
-                    <p>Tgl/Waktu: ${receiptDate}</p>
-
-                    <div class="separator"></div>
-
-                    <table class="receipt">
-                        <thead>
-                            <tr class="text-sm">
-                                <th class="text-left" style="width: 50%">Item</th>
-                                <th class="text-right" style="width: 20%">Qty</th>
-                                <th class="text-right" style="width: 30%">Jumlah</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${itemsHtml}
-                        </tbody>
-                    </table>
-                    
-                    <div class="separator"></div>
-                    
-                    <table class="receipt">
-                        <tr>
-                            <td class="text-right" style="width: 70%">Total:</td>
-                            <td class="text-right">Rp ${order.totalAmount.toLocaleString('id-ID')}</td>
-                        </tr>
-                        <tr>
-                            <td class="text-right">Pembayaran:</td>
-                            <td class="text-right">${paymentMethodName}</td>
-                        </tr>
-                        <tr>
-                            <td class="text-right">Status:</td>
-                            <td class="text-right">${order.status.toUpperCase()}</td>
-                        </tr>
-                    </table>
-
-                    <div class="separator"></div>
-                    
-                    <div class="header" style="margin-top: 10px;">
-                        <p>Terima kasih atas kunjungan Anda!</p>
-                    </div>
-                </body>
-                </html>
-            `;
-
+                <!DOCTYPE html><html><head><title>Struk ${order.orderNumber}</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style>body { font-family: 'Courier New', monospace; font-size: 12px; max-width: 80mm; margin: 0 auto; padding: 10px; } .receipt { width: 100%; border-collapse: collapse; } .receipt th, .receipt td { padding: 3px 0; } .header { text-align: center; margin-bottom: 10px; } .separator { border-top: 1px dashed #000; margin: 5px 0; padding: 5px 0; } .text-right { text-align: right; } .text-left { text-align: left; } .text-center { text-align: center; } @media print { body { margin: 0; padding: 0; } }</style></head>
+                <body><div class="header"><h3>${settings.merchantName}</h3><p>${settings.address}</p><p>Tel: ${settings.phone}</p></div><div class="separator"></div><p>No. Pesanan: ${order.orderNumber}</p><p>Pelanggan: ${order.customerName}</p><p>Tgl/Waktu: ${receiptDate}</p><div class="separator"></div>
+                <table class="receipt"><thead><tr class="text-sm"><th class="text-left" style="width: 50%">Item</th><th class="text-right" style="width: 20%">Qty</th><th class="text-right" style="width: 30%">Jumlah</th></tr></thead><tbody>${itemsHtml}</tbody></table>
+                <div class="separator"></div><table class="receipt"><tr><td class="text-right" style="width: 70%">Total:</td><td class="text-right">Rp ${order.totalAmount.toLocaleString('id-ID')}</td></tr><tr><td class="text-right">Pembayaran:</td><td class="text-right">${paymentMethodName}</td></tr><tr><td class="text-right">Status:</td><td class="text-right">${order.status.toUpperCase()}</td></tr></table>
+                <div class="separator"></div><div class="header" style="margin-top: 10px;"><p>Terima kasih atas kunjungan Anda!</p></div></body></html>`;
             const printWindow = window.open('', '_blank');
             printWindow.document.write(printContent);
             printWindow.document.close();
-
-            printWindow.onload = function() {
-                printWindow.focus();
-                printWindow.print();
-                printWindow.close();
-            };
-
+            printWindow.onload = function() { printWindow.focus(); printWindow.print(); printWindow.close(); };
             showToast('info', 'Cetak', `Mencetak struk pesanan ${order.orderNumber}`);
         }
 
         function deleteOrder(orderId) {
             if (confirm('Apakah Anda yakin ingin menghapus pesanan ini?')) {
-                const data = db.getData();
-                data.orders = data.orders.filter(o => o.id !== orderId);
-                data.queue = data.queue.filter(q => q.orderId !== orderId); // Also delete from queue if exists
-                db.saveData(data);
+                dbData.orders = dbData.orders.filter(o => o.id !== orderId);
+                dbData.queue = dbData.queue.filter(q => q.orderId !== orderId);
                 loadOrdersTable();
                 loadAdminQueue();
                 loadAdminData();
@@ -1882,79 +1576,34 @@
         }
 
         function loadAdminQueue() {
-            const data = db.getData();
             const adminQueueList = document.getElementById('adminQueueList');
-            
             adminQueueList.innerHTML = '';
-            
-            const statusTextMap = {
-                'waiting': 'Pesanan sedang dibuat', 
-                'called': 'Silakan ambil pesanan anda', 
-                'completed': 'Pesanan Selesai Diambil', 
-                'cancelled': 'Dibatalkan', 
-                'paid': 'Menunggu Tambah Antrian', 
-                'pending': 'Menunggu Konfirmasi'
-            };
-
-            data.queue.sort((a, b) => a.id - b.id).forEach(item => {
-                const statusColor = {
-                    'waiting': 'bg-yellow-100 text-yellow-800',
-                    'called': 'bg-blue-100 text-blue-800',
-                    'completed': 'bg-green-100 text-green-800',
-                    'cancelled': 'bg-red-100 text-red-800',
-                    'paid': 'bg-gray-400 text-white',
-                    'pending': 'bg-gray-100 text-gray-800'
-                }[item.status] || 'bg-gray-100 text-gray-800';
-
+            const statusTextMap = { 'waiting': 'Pesanan sedang dibuat', 'called': 'Silakan ambil pesanan anda', 'completed': 'Pesanan Selesai Diambil', 'cancelled': 'Dibatalkan', 'paid': 'Menunggu Tambah Antrian', 'pending': 'Menunggu Konfirmasi' };
+            dbData.queue.sort((a, b) => a.id - b.id).forEach(item => {
+                const statusColor = { 'waiting': 'bg-yellow-100 text-yellow-800', 'called': 'bg-blue-100 text-blue-800', 'completed': 'bg-green-100 text-green-800', 'cancelled': 'bg-red-100 text-red-800', 'paid': 'bg-gray-400 text-white', 'pending': 'bg-gray-100 text-gray-800' }[item.status] || 'bg-gray-100 text-gray-800';
                 const statusText = statusTextMap[item.status] || item.status;
-                
                 adminQueueList.innerHTML += `
                     <div class="bg-white rounded-lg shadow-lg p-6">
                         <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <h3 class="text-2xl font-bold text-purple-600">${item.queueNumber}</h3>
-                                <p class="font-semibold">${item.customerName}</p>
-                                <p class="text-gray-600 text-sm">${item.customerPhone}</p>
-                            </div>
-                            <span class="px-3 py-1 rounded-full text-sm font-semibold ${statusColor}">
-                                ${statusText}
-                            </span>
+                            <div><h3 class="text-2xl font-bold text-purple-600">${item.queueNumber}</h3><p class="font-semibold">${item.customerName}</p><p class="text-gray-600 text-sm">${item.customerPhone}</p></div>
+                            <span class="px-3 py-1 rounded-full text-sm font-semibold ${statusColor}">${statusText}</span>
                         </div>
                         <div class="flex space-x-4">
-                            ${(item.status === 'waiting' || item.status === 'called') ? `
-                                <button onclick="callCustomer(${item.orderId})" class="flex-1 bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition text-sm">
-                                    <i class="fas fa-bullhorn mr-1"></i>Panggil
-                                </button>
-                            ` : ''}
-                            ${item.status === 'called' ? `
-                                <button onclick="completeQueue(${item.id})" class="flex-1 bg-green-600 text-white py-3 rounded hover:bg-green-700 transition text-sm">
-                                    <i class="fas fa-check mr-1"></i>Selesaikan
-                                </button>
-                            ` : ''}
-                            ${item.status === 'completed' ? `
-                                <button onclick="printReceipt(${item.orderId})" class="flex-1 bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition text-sm">
-                                    <i class="fas fa-print mr-1"></i>Cetak Struk
-                                </button>
-                            ` : ''}
-                            <button onclick="deleteQueue(${item.id})" class="bg-red-600 text-white px-4 py-3 rounded hover:bg-red-700 transition">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                            ${(item.status === 'waiting' || item.status === 'called') ? `<button onclick="callCustomer(${item.orderId})" class="flex-1 bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition text-sm"><i class="fas fa-bullhorn mr-1"></i>Panggil</button>` : ''}
+                            ${item.status === 'called' ? `<button onclick="completeQueue(${item.id})" class="flex-1 bg-green-600 text-white py-3 rounded hover:bg-green-700 transition text-sm"><i class="fas fa-check mr-1"></i>Selesaikan</button>` : ''}
+                            ${item.status === 'completed' ? `<button onclick="printReceipt(${item.orderId})" class="flex-1 bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition text-sm"><i class="fas fa-print mr-1"></i>Cetak Struk</button>` : ''}
+                            <button onclick="deleteQueue(${item.id})" class="bg-red-600 text-white px-4 py-3 rounded hover:bg-red-700 transition"><i class="fas fa-trash"></i></button>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             });
         }
 
         function completeQueue(queueId) {
-            const data = db.getData();
-            const queueItem = data.queue.find(q => q.id === queueId);
+            const queueItem = dbData.queue.find(q => q.id === queueId);
             if (queueItem) {
                 queueItem.status = 'completed';
-                const order = data.orders.find(o => o.id === queueItem.orderId);
-                if (order) {
-                    order.status = 'completed';
-                }
-                db.saveData(data);
+                const order = dbData.orders.find(o => o.id === queueItem.orderId);
+                if (order) order.status = 'completed';
                 loadAdminQueue();
                 loadOrdersTable();
                 loadAdminData();
@@ -1964,17 +1613,12 @@
 
         function deleteQueue(queueId) {
             if (confirm('Apakah Anda yakin ingin menghapus antrian ini?')) {
-                const data = db.getData();
-                const queueItem = data.queue.find(q => q.id === queueId);
+                const queueItem = dbData.queue.find(q => q.id === queueId);
                 if (queueItem) {
-                    const order = data.orders.find(o => o.id === queueItem.orderId);
-                     // Set order status back to paid if deleted from queue before completion
-                    if (order && order.status === 'waiting') {
-                        order.status = 'paid';
-                    }
+                    const order = dbData.orders.find(o => o.id === queueItem.orderId);
+                    if (order && order.status === 'waiting') order.status = 'paid';
                 }
-                data.queue = data.queue.filter(q => q.id !== queueId);
-                db.saveData(data);
+                dbData.queue = dbData.queue.filter(q => q.id !== queueId);
                 loadAdminQueue();
                 loadOrdersTable();
                 loadAdminData();
@@ -1983,15 +1627,12 @@
         }
 
         function loadAdminProducts() {
-            const data = db.getData();
-            const products = data.products;
+            const products = dbData.products;
             const adminProductsTable = document.getElementById('adminProductsTable');
             adminProductsTable.innerHTML = '';
-
             const startIndex = (productsCurrentPage - 1) * itemsPerPage;
             const endIndex = startIndex + itemsPerPage;
             const paginatedProducts = products.slice(startIndex, endIndex);
-
             paginatedProducts.forEach((product, index) => {
                 adminProductsTable.innerHTML += `
                     <tr>
@@ -1999,23 +1640,9 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">${product.name}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">${product.category}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">Rp ${product.price.toLocaleString()}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 py-1 rounded-full text-xs font-semibold ${product.available ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
-                                ${product.available ? 'Tersedia' : 'Habis'}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex space-x-2">
-                                <button onclick="editProduct(${product.id})" class="text-blue-600 hover:text-blue-800">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button onclick="deleteProduct(${product.id})" class="text-red-600 hover:text-red-800">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
+                        <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 py-1 rounded-full text-xs font-semibold ${product.available ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${product.available ? 'Tersedia' : 'Habis'}</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap"><div class="flex space-x-2"><button onclick="editProduct(${product.id})" class="text-blue-600 hover:text-blue-800"><i class="fas fa-edit"></i></button><button onclick="deleteProduct(${product.id})" class="text-red-600 hover:text-red-800"><i class="fas fa-trash"></i></button></div></td>
+                    </tr>`;
             });
             renderProductsPagination(products.length);
         }
@@ -2025,17 +1652,10 @@
             const totalPages = Math.ceil(totalItems / itemsPerPage);
             paginationContainer.innerHTML = '';
             if (totalPages <= 1) return;
-
             paginationContainer.innerHTML = `
-                <button onclick="changeProductsPage(-1)" class="w-full sm:w-auto bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 disabled:opacity-50" ${productsCurrentPage === 1 ? 'disabled' : ''}>
-                    Sebelumnya
-                </button>
-                <span class="text-sm font-semibold my-2 sm:my-0">
-                    Halaman ${productsCurrentPage} dari ${totalPages}
-                </span>
-                <button onclick="changeProductsPage(1)" class="w-full sm:w-auto bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 disabled:opacity-50" ${productsCurrentPage === totalPages ? 'disabled' : ''}>
-                    Berikutnya
-                </button>
+                <button onclick="changeProductsPage(-1)" class="w-full sm:w-auto bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 disabled:opacity-50" ${productsCurrentPage === 1 ? 'disabled' : ''}>Sebelumnya</button>
+                <span class="text-sm font-semibold my-2 sm:my-0">Halaman ${productsCurrentPage} dari ${totalPages}</span>
+                <button onclick="changeProductsPage(1)" class="w-full sm:w-auto bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 disabled:opacity-50" ${productsCurrentPage === totalPages ? 'disabled' : ''}>Berikutnya</button>
             `;
         }
 
@@ -2060,8 +1680,7 @@
         }
 
         function editProduct(productId) {
-            const data = db.getData();
-            const product = data.products.find(p => p.id === productId);
+            const product = dbData.products.find(p => p.id === productId);
             if (product) {
                 document.getElementById('productModal').classList.remove('hidden');
                 document.getElementById('productModalTitle').textContent = 'Edit Produk';
@@ -2076,25 +1695,18 @@
 
         function saveProduct(event) {
             event.preventDefault();
-            
-            const data = db.getData();
             const productData = {
-                name: document.getElementById('productName').value,
-                category: document.getElementById('productCategory').value,
-                description: document.getElementById('productDescription').value,
-                price: parseInt(document.getElementById('productPrice').value),
+                name: document.getElementById('productName').value, category: document.getElementById('productCategory').value,
+                description: document.getElementById('productDescription').value, price: parseInt(document.getElementById('productPrice').value),
                 available: document.getElementById('productStatus').value === 'true'
             };
-            
             if (editingProductId) {
-                const productIndex = data.products.findIndex(p => p.id === editingProductId);
-                data.products[productIndex] = { ...data.products[productIndex], ...productData };
+                const productIndex = dbData.products.findIndex(p => p.id === editingProductId);
+                dbData.products[productIndex] = { ...dbData.products[productIndex], ...productData };
             } else {
                 productData.id = Date.now();
-                data.products.push(productData);
+                dbData.products.push(productData);
             }
-            
-            db.saveData(data);
             loadAdminProducts();
             loadProducts();
             closeProductModal();
@@ -2103,9 +1715,7 @@
 
         function deleteProduct(productId) {
             if (confirm('Apakah Anda yakin ingin menghapus produk ini?')) {
-                const data = db.getData();
-                data.products = data.products.filter(p => p.id !== productId);
-                db.saveData(data);
+                dbData.products = dbData.products.filter(p => p.id !== productId);
                 productsCurrentPage = 1;
                 loadAdminProducts();
                 loadProducts();
@@ -2114,37 +1724,20 @@
         }
 
         function loadUsersTable() {
-            const data = db.getData();
-            const users = data.users;
+            const users = dbData.users;
             const usersTable = document.getElementById('usersTable');
             usersTable.innerHTML = '';
-            
             const startIndex = (usersCurrentPage - 1) * itemsPerPage;
             const endIndex = startIndex + itemsPerPage;
             const paginatedUsers = users.slice(startIndex, endIndex);
-
             paginatedUsers.forEach(user => {
                 usersTable.innerHTML += `
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">${user.fullName}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">${user.username}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="px-2 py-1 rounded-full text-xs font-semibold ${user.role === 'superadmin' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'}">
-                                ${user.role}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex space-x-2">
-                                <button onclick="editUser(${user.id})" class="text-blue-600 hover:text-blue-800">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button onclick="deleteUser(${user.id})" class="text-red-600 hover:text-red-800">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
+                        <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 py-1 rounded-full text-xs font-semibold ${user.role === 'superadmin' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'}">${user.role}</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap"><div class="flex space-x-2"><button onclick="editUser(${user.id})" class="text-blue-600 hover:text-blue-800"><i class="fas fa-edit"></i></button><button onclick="deleteUser(${user.id})" class="text-red-600 hover:text-red-800"><i class="fas fa-trash"></i></button></div></td>
+                    </tr>`;
             });
             renderUsersPagination(users.length);
         }
@@ -2154,17 +1747,10 @@
             const totalPages = Math.ceil(totalItems / itemsPerPage);
             paginationContainer.innerHTML = '';
             if (totalPages <= 1) return;
-
             paginationContainer.innerHTML = `
-                <button onclick="changeUsersPage(-1)" class="w-full sm:w-auto bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 disabled:opacity-50" ${usersCurrentPage === 1 ? 'disabled' : ''}>
-                    Sebelumnya
-                </button>
-                <span class="text-sm font-semibold my-2 sm:my-0">
-                    Halaman ${usersCurrentPage} dari ${totalPages}
-                </span>
-                <button onclick="changeUsersPage(1)" class="w-full sm:w-auto bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 disabled:opacity-50" ${usersCurrentPage === totalPages ? 'disabled' : ''}>
-                    Berikutnya
-                </button>
+                <button onclick="changeUsersPage(-1)" class="w-full sm:w-auto bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 disabled:opacity-50" ${usersCurrentPage === 1 ? 'disabled' : ''}>Sebelumnya</button>
+                <span class="text-sm font-semibold my-2 sm:my-0">Halaman ${usersCurrentPage} dari ${totalPages}</span>
+                <button onclick="changeUsersPage(1)" class="w-full sm:w-auto bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 disabled:opacity-50" ${usersCurrentPage === totalPages ? 'disabled' : ''}>Berikutnya</button>
             `;
         }
 
@@ -2188,8 +1774,7 @@
         }
 
         function editUser(userId) {
-            const data = db.getData();
-            const user = data.users.find(u => u.id === userId);
+            const user = dbData.users.find(u => u.id === userId);
             if (user) {
                 document.getElementById('userModal').classList.remove('hidden');
                 document.getElementById('userModalTitle').textContent = 'Edit Admin';
@@ -2203,24 +1788,17 @@
 
         function saveUser(event) {
             event.preventDefault();
-            
-            const data = db.getData();
             const userData = {
-                username: document.getElementById('userUsername').value,
-                password: document.getElementById('userPassword').value,
-                fullName: document.getElementById('userFullName').value,
-                role: document.getElementById('userRole').value
+                username: document.getElementById('userUsername').value, password: document.getElementById('userPassword').value,
+                fullName: document.getElementById('userFullName').value, role: document.getElementById('userRole').value
             };
-            
             if (editingUserId) {
-                const user = data.users.find(u => u.id === editingUserId);
+                const user = dbData.users.find(u => u.id === editingUserId);
                 Object.assign(user, userData);
             } else {
                 userData.id = Date.now();
-                data.users.push(userData);
+                dbData.users.push(userData);
             }
-            
-            db.saveData(data);
             loadUsersTable();
             closeUserModal();
             showToast('success', 'Berhasil', `Admin telah ${editingUserId ? 'diperbarui' : 'ditambahkan'}`);
@@ -2228,9 +1806,7 @@
 
         function deleteUser(userId) {
             if (confirm('Apakah Anda yakin ingin menghapus admin ini?')) {
-                const data = db.getData();
-                data.users = data.users.filter(u => u.id !== userId);
-                db.saveData(data);
+                dbData.users = dbData.users.filter(u => u.id !== userId);
                 usersCurrentPage = 1;
                 loadUsersTable();
                 showToast('success', 'Berhasil', 'Admin telah dihapus');
@@ -2238,9 +1814,7 @@
         }
 
         function loadSettingsForm() {
-            const data = db.getData();
-            const settings = data.settings;
-            
+            const settings = dbData.settings;
             document.getElementById('settingsMerchantName').value = settings.merchantName;
             document.getElementById('settingsJumbotronTitle').value = settings.jumbotronTitle;
             document.getElementById('settingsJumbotronSubtitle').value = settings.jumbotronSubtitle;
@@ -2248,46 +1822,28 @@
             document.getElementById('settingsPhone').value = settings.phone;
             document.getElementById('settingsEmail').value = settings.email;
             document.getElementById('settingsHours').value = settings.hours;
-            
             const paymentMethodsContainer = document.getElementById('settingsPaymentMethods');
             paymentMethodsContainer.innerHTML = '';
-            
             settings.paymentMethods.forEach(method => {
                 paymentMethodsContainer.innerHTML += `
-                    <label class="flex items-center space-x-2">
-                        <input type="checkbox" class="form-checkbox" ${method.active ? 'checked' : ''} onchange="togglePaymentMethod('${method.id}', this.checked)">
-                        <i class="fas ${method.icon} text-purple-600"></i>
-                        <span>${method.name}</span>
-                    </label>
-                `;
+                    <label class="flex items-center space-x-2"><input type="checkbox" class="form-checkbox" ${method.active ? 'checked' : ''} onchange="togglePaymentMethod('${method.id}', this.checked)"><i class="fas ${method.icon} text-purple-600"></i><span>${method.name}</span></label>`;
             });
         }
 
         function togglePaymentMethod(methodId, active) {
-            const data = db.getData();
-            const method = data.settings.paymentMethods.find(m => m.id === methodId);
-            if (method) {
-                method.active = active;
-                db.saveData(data);
-            }
+            const method = dbData.settings.paymentMethods.find(m => m.id === methodId);
+            if (method) method.active = active;
         }
 
         function saveSettings(event) {
             event.preventDefault();
-            
-            const data = db.getData();
-            data.settings = {
-                ...data.settings,
-                merchantName: document.getElementById('settingsMerchantName').value,
-                jumbotronTitle: document.getElementById('settingsJumbotronTitle').value,
-                jumbotronSubtitle: document.getElementById('settingsJumbotronSubtitle').value,
-                address: document.getElementById('settingsAddress').value,
-                phone: document.getElementById('settingsPhone').value,
-                email: document.getElementById('settingsEmail').value,
+            dbData.settings = {
+                ...dbData.settings,
+                merchantName: document.getElementById('settingsMerchantName').value, jumbotronTitle: document.getElementById('settingsJumbotronTitle').value,
+                jumbotronSubtitle: document.getElementById('settingsJumbotronSubtitle').value, address: document.getElementById('settingsAddress').value,
+                phone: document.getElementById('settingsPhone').value, email: document.getElementById('settingsEmail').value,
                 hours: document.getElementById('settingsHours').value
             };
-            
-            db.saveData(data);
             loadSettings();
             showToast('success', 'Berhasil', 'Pengaturan telah disimpan');
         }
@@ -2295,10 +1851,8 @@
         function loadReportsSection() {
             const today = new Date();
             const lastWeek = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-            
             document.getElementById('reportStartDate').value = lastWeek.toISOString().split('T')[0];
             document.getElementById('reportEndDate').value = today.toISOString().split('T')[0];
-            
             generateReport();
         }
 
@@ -2306,166 +1860,61 @@
             const startDate = new Date(document.getElementById('reportStartDate').value);
             const endDate = new Date(document.getElementById('reportEndDate').value);
             endDate.setHours(23, 59, 59, 999);
-            
-            const data = db.getData();
-            const filteredOrders = data.orders.filter(order => {
+            const filteredOrders = dbData.orders.filter(order => {
                 const orderDate = new Date(order.createdAt);
                 return orderDate >= startDate && orderDate <= endDate;
             });
-            
             const totalOrders = filteredOrders.length;
-            const totalRevenue = filteredOrders
-                .filter(o => o.status === 'paid' || o.status === 'completed' || o.status === 'waiting')
-                .reduce((sum, o) => sum + o.totalAmount, 0);
-            
+            const totalRevenue = filteredOrders.filter(o => o.status === 'paid' || o.status === 'completed' || o.status === 'waiting').reduce((sum, o) => sum + o.totalAmount, 0);
             const paymentMethods = {};
             filteredOrders.forEach(order => {
                 paymentMethods[order.paymentMethod] = (paymentMethods[order.paymentMethod] || 0) + 1;
             });
-            
             const reportContent = document.getElementById('reportContent');
             reportContent.innerHTML = `
-                <div class="mb-6">
-                    <h3 class="text-xl font-semibold mb-4">Ringkasan Laporan</h3>
-                    <div class="grid md:grid-cols-3 gap-4">
-                        <div class="bg-blue-50 p-4 rounded-lg">
-                            <p class="text-blue-600 font-semibold">Total Pesanan</p>
-                            <p class="text-2xl font-bold">${totalOrders}</p>
-                        </div>
-                        <div class="bg-green-50 p-4 rounded-lg">
-                            <p class="text-green-600 font-semibold">Total Pendapatan</p>
-                            <p class="text-2xl font-bold">Rp ${totalRevenue.toLocaleString()}</p>
-                        </div>
-                        <div class="bg-purple-50 p-4 rounded-lg">
-                            <p class="text-purple-600 font-semibold">Rata-rata</p>
-                            <p class="text-2xl font-bold">Rp ${totalOrders > 0 ? Math.round(totalRevenue / totalOrders).toLocaleString() : 0}</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="mb-6">
-                    <h3 class="text-xl font-semibold mb-4">Metode Pembayaran</h3>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        ${Object.entries(paymentMethods).map(([method, count]) => `
-                            <div class="bg-gray-50 p-4 rounded-lg text-center">
-                                <p class="font-semibold">${method}</p>
-                                <p class="text-2xl font-bold">${count}</p>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-                
-                <div>
-                    <h3 class="text-xl font-semibold mb-4">Detail Pesanan</h3>
-                    <div id="reportTableContainer" class="overflow-x-auto">
-                        <table class="w-full border-collapse border border-gray-300">
-                            <thead>
-                                <tr class="bg-gray-50">
-                                    <th class="border border-gray-300 px-4 py-2">No. Pesanan</th>
-                                    <th class="border border-gray-300 px-4 py-2">Tanggal</th>
-                                    <th class="border border-gray-300 px-4 py-2">Pelanggan</th>
-                                    <th class="border border-gray-300 px-4 py-2">Total</th>
-                                    <th class="border border-gray-300 px-4 py-2">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${filteredOrders.map(order => `
-                                    <tr>
-                                        <td class="border border-gray-300 px-4 py-2">${order.orderNumber}</td>
-                                        <td class="border border-gray-300 px-4 py-2">${new Date(order.createdAt).toLocaleDateString('id-ID')}</td>
-                                        <td class="border border-gray-300 px-4 py-2">${order.customerName}</td>
-                                        <td class="border border-gray-300 px-4 py-2">Rp ${order.totalAmount.toLocaleString()}</td>
-                                        <td class="border border-gray-300 px-4 py-2">${order.status}</td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            `;
+                <div class="mb-6"><h3 class="text-xl font-semibold mb-4">Ringkasan Laporan</h3><div class="grid md:grid-cols-3 gap-4"><div class="bg-blue-50 p-4 rounded-lg"><p class="text-blue-600 font-semibold">Total Pesanan</p><p class="text-2xl font-bold">${totalOrders}</p></div><div class="bg-green-50 p-4 rounded-lg"><p class="text-green-600 font-semibold">Total Pendapatan</p><p class="text-2xl font-bold">Rp ${totalRevenue.toLocaleString()}</p></div><div class="bg-purple-50 p-4 rounded-lg"><p class="text-purple-600 font-semibold">Rata-rata</p><p class="text-2xl font-bold">Rp ${totalOrders > 0 ? Math.round(totalRevenue / totalOrders).toLocaleString() : 0}</p></div></div></div>
+                <div class="mb-6"><h3 class="text-xl font-semibold mb-4">Metode Pembayaran</h3><div class="grid grid-cols-2 md:grid-cols-4 gap-4">${Object.entries(paymentMethods).map(([method, count]) => `<div class="bg-gray-50 p-4 rounded-lg text-center"><p class="font-semibold">${method}</p><p class="text-2xl font-bold">${count}</p></div>`).join('')}</div></div>
+                <div><h3 class="text-xl font-semibold mb-4">Detail Pesanan</h3><div id="reportTableContainer" class="overflow-x-auto"><table class="w-full border-collapse border border-gray-300"><thead><tr class="bg-gray-50"><th class="border border-gray-300 px-4 py-2">No. Pesanan</th><th class="border border-gray-300 px-4 py-2">Tanggal</th><th class="border border-gray-300 px-4 py-2">Pelanggan</th><th class="border border-gray-300 px-4 py-2">Total</th><th class="border border-gray-300 px-4 py-2">Status</th></tr></thead>
+                <tbody>${filteredOrders.map(order => `<tr><td class="border border-gray-300 px-4 py-2">${order.orderNumber}</td><td class="border border-gray-300 px-4 py-2">${new Date(order.createdAt).toLocaleDateString('id-ID')}</td><td class="border border-gray-300 px-4 py-2">${order.customerName}</td><td class="border border-gray-300 px-4 py-2">Rp ${order.totalAmount.toLocaleString()}</td><td class="border border-gray-300 px-4 py-2">${order.status}</td></tr>`).join('')}</tbody></table></div></div>`;
         }
 
         function printReport() {
-            const data = db.getData();
-            const merchantName = data.settings.merchantName;
+            const merchantName = dbData.settings.merchantName;
             const printWindow = window.open('', '_blank');
             const tableContainer = document.getElementById('reportTableContainer');
             const startDate = document.getElementById('reportStartDate').value;
             const endDate = document.getElementById('reportEndDate').value;
-            
-            const printHTML = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Laporan Transaksi ${merchantName}</title>
-                    <style>
-                        body { font-family: 'Poppins', Arial, sans-serif; margin: 20px; color: #000; background: white; }
-                        h1 { text-align: center; margin-bottom: 10px; color: #000; font-size: 18px; font-weight: bold; }
-                        h2 { text-align: center; margin-bottom: 20px; color: #000; font-size: 14px; }
-                        h3 { text-align: center; margin-bottom: 15px; color: #000; font-size: 14px; font-weight: bold; }
-                        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-                        th, td { border: 1px solid #000; padding: 6px; text-align: left; font-size: 12px; }
-                        th { background-color: #f5f5f5; font-weight: bold; }
-                        @media print {
-                            body { margin: 10px; }
-                            h1 { font-size: 16px; }
-                            h2 { font-size: 12px; }
-                            h3 { font-size: 12px; }
-                            th, td { padding: 4px; font-size: 10px; }
-                        }
-                    </style>
-                </head>
-                <body>
-                    <h1>LAPORAN TRANSAKSI ${merchantName.toUpperCase()}</h1>
-                    <h2>Periode: ${formatDate(startDate)} - ${formatDate(endDate)}</h2>
-                    <h3>DETAIL PESANAN</h3>
-                    ${tableContainer ? tableContainer.innerHTML : '<p>Tidak ada data untuk ditampilkan</p>'}
-                </body>
-                </html>
-            `;
-            
+            const printHTML = `<!DOCTYPE html><html><head><title>Laporan Transaksi ${merchantName}</title><style> body { font-family: 'Poppins', Arial, sans-serif; margin: 20px; color: #000; background: white; } h1 { text-align: center; margin-bottom: 10px; color: #000; font-size: 18px; font-weight: bold; } h2 { text-align: center; margin-bottom: 20px; color: #000; font-size: 14px; } h3 { text-align: center; margin-bottom: 15px; color: #000; font-size: 14px; font-weight: bold; } table { width: 100%; border-collapse: collapse; margin-top: 10px; } th, td { border: 1px solid #000; padding: 6px; text-align: left; font-size: 12px; } th { background-color: #f5f5f5; font-weight: bold; } @media print { body { margin: 10px; } h1 { font-size: 16px; } h2 { font-size: 12px; } h3 { font-size: 12px; } th, td { padding: 4px; font-size: 10px; } } </style></head>
+                <body><h1>LAPORAN TRANSAKSI ${merchantName.toUpperCase()}</h1><h2>Periode: ${formatDate(startDate)} - ${formatDate(endDate)}</h2><h3>DETAIL PESANAN</h3>${tableContainer ? tableContainer.innerHTML : '<p>Tidak ada data untuk ditampilkan</p>'}</body></html>`;
             printWindow.document.write(printHTML);
             printWindow.document.close();
-            
-            printWindow.onload = function() {
-                printWindow.focus();
-                printWindow.print();
-                printWindow.close();
-            };
+            printWindow.onload = function() { printWindow.focus(); printWindow.print(); printWindow.close(); };
         }
 
         function downloadDatabase() {
-            const data = db.getData();
-            const notepadContent = JSON.stringify(data, null, 2);
-            const blob = new Blob([notepadContent], { type: 'text/plain;charset=utf-8;' });
+            const notepadContent = JSON.stringify(dbData, null, 2);
+            const blob = new Blob([notepadContent], { type: 'application/json;charset=utf-8;' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `kopiku_database_${new Date().toISOString().split('T')[0]}.txt`;
+            a.download = `kopiku_database_${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             window.URL.revokeObjectURL(url);
-            
             showToast('success', 'Berhasil', 'Database telah diunduh');
         }
         
         function handleImportDatabase(event) {
             const file = event.target.files[0];
             if (!file) return;
-
             if (confirm('PERINGATAN: Mengimpor database akan menimpa data aplikasi yang ada. Lanjutkan?')) {
                 const reader = new FileReader();
-
                 reader.onload = function(e) {
                     try {
                         const importedData = JSON.parse(e.target.result);
-                        // Simple validation to check if it looks like a valid structure
                         if (importedData.settings && importedData.products && importedData.orders) {
-                            localStorage.setItem('kopiku_database', e.target.result);
-                            showToast('success', 'Import Berhasil', 'Database berhasil diimpor. Aplikasi akan dimuat ulang.');
-                            // Reload the application to apply new database
-                            setTimeout(() => {
-                                window.location.reload();
-                            }, 1500);
+                            dbData = importedData; // Replace in-memory data
+                            showToast('success', 'Import Berhasil', 'Database berhasil diimpor. Memuat ulang data...');
+                            initializeApp(); // Re-initialize the app with the new data
                         } else {
                             showToast('error', 'Import Gagal', 'Struktur file database tidak valid.');
                         }
@@ -2474,30 +1923,18 @@
                         console.error('Import Database Error:', error);
                     }
                 };
-
-                reader.onerror = function() {
-                    showToast('error', 'Import Gagal', 'Gagal membaca file.');
-                };
-
+                reader.onerror = function() { showToast('error', 'Import Gagal', 'Gagal membaca file.'); };
                 reader.readAsText(file);
             }
         }
 
         function sendContactMessage(event) {
             event.preventDefault();
-            
-            const data = db.getData();
             const message = {
-                id: Date.now(),
-                name: event.target[0].value,
-                email: event.target[1].value,
-                message: event.target[2].value,
-                createdAt: new Date().toISOString()
+                id: Date.now(), name: event.target[0].value, email: event.target[1].value,
+                message: event.target[2].value, createdAt: new Date().toISOString()
             };
-            
-            data.messages.push(message);
-            db.saveData(data);
-            
+            dbData.messages.push(message);
             event.target.reset();
             showToast('success', 'Berhasil', 'Pesan Anda telah terkirim');
         }
@@ -2507,23 +1944,17 @@
             const toastIcon = document.getElementById('toastIcon');
             const toastTitle = document.getElementById('toastTitle');
             const toastMessage = document.getElementById('toastMessage');
-            
             const icons = {
                 success: '<i class="fas fa-check-circle text-green-500 text-xl"></i>',
                 error: '<i class="fas fa-exclamation-circle text-red-500 text-xl"></i>',
                 warning: '<i class="fas fa-exclamation-triangle text-yellow-500 text-xl"></i>',
                 info: '<i class="fas fa-info-circle text-blue-500 text-xl"></i>'
             };
-            
             toastIcon.innerHTML = icons[type] || icons.info;
             toastTitle.textContent = title;
             toastMessage.textContent = message;
-            
             toast.classList.remove('hidden');
-            
-            setTimeout(() => {
-                toast.classList.add('hidden');
-            }, 3000);
+            setTimeout(() => { toast.classList.add('hidden'); }, 3000);
         }
 
         document.addEventListener('DOMContentLoaded', function() {
