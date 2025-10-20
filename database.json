@@ -1,0 +1,44 @@
+{
+  "settings": {
+    "merchantName": "KopiKu Coffee Shop",
+    "jumbotronTitle": "Selamat Datang di KopiKu",
+    "jumbotronSubtitle": "Nikmati kopi terbaik dengan suasana yang nyaman",
+    "address": "Jl. Contoh No. 123, Jakarta",
+    "phone": "+62 812-3456-7890",
+    "email": "info@kopiku.com",
+    "hours": "Senin - Minggu: 08:00 - 22:00",
+    "paymentMethods": [
+      { "id": "cash", "name": "Tunai", "icon": "fa-money-bill", "active": true },
+      { "id": "qris", "name": "QRIS", "icon": "fa-qrcode", "active": true },
+      { "id": "transfer", "name": "Transfer Bank", "icon": "fa-university", "active": false }
+    ],
+    "theme": "purple",
+    "customIcons": {
+      "coffee-cup": "fas fa-coffee", "wifi": "fas fa-wifi", "couch": "fas fa-couch",
+      "home": "fas fa-home", "menu": "fas fa-mug-hot", "queue": "fas fa-users",
+      "contact": "fas fa-phone", "admin": "fas fa-user-shield", "cart": "fas fa-shopping-cart",
+      "address": "fas fa-map-marker-alt", "email": "fas fa-envelope", "hours": "fas fa-clock",
+      "send": "fas fa-paper-plane", "checkout": "fas fa-check", "add": "fas fa-plus"
+    }
+  },
+  "products": [
+    { "id": 1, "name": "Espresso", "category": "coffee", "description": "Kopi klasik yang kuat", "price": 15000, "available": true },
+    { "id": 2, "name": "Cappuccino", "category": "coffee", "description": "Espresso dengan susu foam", "price": 25000, "available": true },
+    { "id": 3, "name": "Caffe Latte", "category": "coffee", "description": "Espresso dengan susu panas", "price": 28000, "available": true },
+    { "id": 4, "name": "Americano", "category": "coffee", "description": "Espresso dengan air panas", "price": 20000, "available": true },
+    { "id": 5, "name": "Chocolate Cake", "category": "dessert", "description": "Kue coklat lembut", "price": 30000, "available": true },
+    { "id": 6, "name": "Croissant", "category": "food", "description": "Pastry buttery dari Perancis", "price": 22000, "available": true },
+    { "id": 7, "name": "Sandwich", "category": "food", "description": "Roti lapis dengan isi", "price": 35000, "available": true },
+    { "id": 8, "name": "Ice Cream", "category": "dessert", "description": "Es krim premium", "price": 18000, "available": true },
+    { "id": 9, "name": "Kopi Susu Gula Aren", "category": "coffee", "description": "Kopi susu kekinian", "price": 22000, "available": true },
+    { "id": 10, "name": "Red Velvet Latte", "category": "other", "description": "Minuman non-kopi", "price": 27000, "available": true },
+    { "id": 11, "name": "Matcha Latte", "category": "other", "description": "Teh hijau dengan susu", "price": 27000, "available": true },
+    { "id": 12, "name": "Donat Coklat", "category": "dessert", "description": "Donat empuk", "price": 10000, "available": true }
+  ],
+  "orders": [],
+  "queue": [],
+  "users": [
+    { "id": 1, "username": "admin", "password": "admin123", "fullName": "Administrator", "role": "admin" }
+  ],
+  "messages": []
+}
